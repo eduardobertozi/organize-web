@@ -20,4 +20,20 @@ export class InMemoryServantRepository extends ServantRepository {
   async create(servant: Servant) {
     this.items.push(servant)
   }
+
+  async save(servant: Servant): Promise<void> {
+    const index = this.items.findIndex((item) => item.id.equals(servant.id))
+
+    if (index !== -1) {
+      this.items[index] = servant
+    }
+  }
+
+  async delete(servant: Servant): Promise<void> {
+    const index = this.items.findIndex((item) => item.id.equals(servant.id))
+
+    if (index !== -1) {
+      this.items.splice(index, 1)
+    }
+  }
 }
