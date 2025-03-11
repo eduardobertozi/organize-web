@@ -1,0 +1,11 @@
+import { UniqueEntityID } from '@/core/unique-entity-id'
+import { Servant } from '../../enterprise/servant'
+
+export abstract class ServantRepository {
+  abstract findById(id: UniqueEntityID): Promise<Servant | null>
+  abstract findByName(name: string): Promise<Servant | null>
+  abstract findAll(): Promise<Servant[]>
+  abstract create(servant: Servant): Promise<void>
+  abstract save(servant: Servant): Promise<void>
+  abstract delete(servant: Servant): Promise<void>
+}
