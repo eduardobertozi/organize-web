@@ -13,6 +13,10 @@ export class InMemoryServantRepository extends ServantRepository {
     return this.items.find((item) => item.name === name) ?? null
   }
 
+  async findAll(page = 1) {
+    return this.items.slice((page - 1) * 10, page * 10)
+  }
+
   async create(servant: Servant) {
     this.items.push(servant)
   }
