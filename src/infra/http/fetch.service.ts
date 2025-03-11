@@ -1,0 +1,54 @@
+import {
+  DeleteProps,
+  GetProps,
+  HttpRepository,
+  PatchProps,
+  PostProps,
+  PutProps,
+} from './repositories/http.repository'
+
+export class FetchServant implements HttpRepository {
+  async get<T>({ url, next }: GetProps): Promise<T> {
+    const response = await fetch(url, { next }).then((res) => res.json())
+    return response as T
+  }
+
+  async post<T, D>({ url, data, next }: PostProps<D>): Promise<T> {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      next,
+    }).then((res) => res.json())
+
+    return response as T
+  }
+
+  async put<T, D>({ url, data, next }: PutProps<D>): Promise<T> {
+    const response = await fetch(url, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+      next,
+    })
+
+    return response as T
+  }
+
+  async delete<T>({ url, next }: DeleteProps): Promise<T> {
+    const response = await fetch(url, {
+      method: 'DELETE',
+      next,
+    }).then((res) => res.json())
+
+    return response as T
+  }
+
+  async patch<T, D>({ url, data, next }: PatchProps<D>): Promise<T> {
+    const response = await fetch(url, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+      next,
+    }).then((res) => res.json())
+
+    return response as T
+  }
+}
