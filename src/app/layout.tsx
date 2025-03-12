@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { Roboto_Condensed } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import './globals.css'
+import { ThemeProvider } from '@/components/_global/theme-provider'
 
-const roboto = Roboto_Condensed({
-  variable: '--font-roboto',
+const inter = Inter({
   subsets: ['latin'],
 })
 
@@ -19,7 +19,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${roboto.variable} antialiased`}>{children}</body>
+      <body className={`dark ${inter.className} antialiased`}>
+        {/* <ThemeProvider attribute="class" defaultTheme="dark"> */}
+        {children}
+        {/* </ThemeProvider> */}
+      </body>
     </html>
   )
 }

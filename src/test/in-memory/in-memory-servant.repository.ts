@@ -5,6 +5,11 @@ import { Servant } from '@/domain/servant/enterprise/servant'
 export class InMemoryServantRepository extends ServantRepository {
   public items: Servant[] = []
 
+  constructor(overrideItems?: Servant[]) {
+    super()
+    this.items = overrideItems ?? []
+  }
+
   async findById(id: UniqueEntityID) {
     return this.items.find((item) => item.id.equals(id)) ?? null
   }
