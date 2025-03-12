@@ -7,7 +7,7 @@ import {
   PutProps,
 } from './repositories/http.repository'
 
-export class FetchServant implements HttpRepository {
+export class FetchService implements HttpRepository {
   async get<T>({ url, next }: GetProps): Promise<T> {
     const response = await fetch(url, { next }).then((res) => res.json())
     return response as T
