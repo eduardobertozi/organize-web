@@ -23,10 +23,10 @@ export const PaginatedItemsView = <T,>({
           Buscar Serviço
         </FloatingLabel>
       </div>
-      <ScrollArea className="relative h-[500px] w-full">
-        <div className="from-background absolute top-0 right-0 left-0 z-10 h-4 bg-gradient-to-b to-transparent"></div>
-        <div className="from-background absolute right-0 bottom-0 left-0 z-10 h-24 bg-gradient-to-t to-transparent"></div>
-        <div className="relative z-0 flex w-full flex-col items-center">
+      <ScrollArea className="relative h-[480px] min-h-[480px] w-full">
+        <div className="from-background absolute top-0 right-0 left-0 z-10 h-4 bg-gradient-to-b to-transparent" />
+        <div className="from-background absolute right-0 bottom-0 left-0 z-10 h-10 bg-gradient-to-t to-transparent" />
+        <div className="relative z-0 mb-4 flex w-full flex-col">
           {vm.items.map((item) => vm.renderItem(item))}
 
           <InfiniteScroll
