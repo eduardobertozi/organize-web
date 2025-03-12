@@ -1,10 +1,6 @@
 import { PaginatedItemsView } from '@/components/_global/paginated-items/paginated-items.view'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import {
-  FloatingInput,
-  FloatingLabel,
-} from '@/components/ui/expansions/floating-label-input'
 import { IUseServantViewModel, ServantToJson } from './servant.model'
 
 export const ServantView: React.FC<IUseServantViewModel> = ({ vm }) => {
@@ -20,18 +16,11 @@ export const ServantView: React.FC<IUseServantViewModel> = ({ vm }) => {
             Fechar
           </Button>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <form>
-            <div className="relative">
-              <FloatingInput id="floating-customize" />
-              <FloatingLabel htmlFor="floating-customize">
-                Buscar Serviço
-              </FloatingLabel>
-            </div>
-          </form>
+        <CardContent>
           <div className="flex h-full w-full flex-col justify-between">
             <PaginatedItemsView<ServantToJson>
               fetchItems={vm.getServants}
+              fetchFilteredItems={vm.getFilteredServants}
               renderItem={(item) => (
                 <li className="w-full list-none border-b p-2" key={item.id}>
                   {item.name}
@@ -39,7 +28,9 @@ export const ServantView: React.FC<IUseServantViewModel> = ({ vm }) => {
               )}
             />
 
-            <p>Exibindo {vm.servantCount} itens</p>
+            <p className="p-2 pt-4 text-end text-sm">
+              Exibindo {vm.servantCount} itens
+            </p>
           </div>
         </CardContent>
       </Card>

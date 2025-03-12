@@ -10,5 +10,9 @@ export interface IUseServantViewModel {
     context: IGlobal
     servantCount: number
     getServants: (page: number) => Promise<ServantToJson[]>
+    getFilteredServants: (
+      searchText: string,
+      page: number,
+    ) => Promise<ServantToJson[]>
   }
 }

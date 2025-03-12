@@ -2,7 +2,7 @@
 
 import { IUseInitProps } from '@/hooks/use-init.model'
 import { useState } from 'react'
-import { fetchServants } from './servant.actions'
+import { fetchServants, findFilteredServants } from './servant.actions'
 import { IUseServantViewModel } from './servant.model'
 
 export const useServantViewModel = ({
@@ -12,7 +12,14 @@ export const useServantViewModel = ({
 
   const getServants = async (page: number) => {
     const items = await fetchServants(page)
-    setServantCount((count) => (count += items.length))
+    setServantCount((count) => count + items.length)
+
+    return items
+  }
+
+  const getFilteredServants = async (searchText: string, page: number) => {
+    const items = await findFilteredServants(searchText, page)
+    setServantCount((count) => count + items.length)
 
     return items
   }
@@ -22,6 +29,7 @@ export const useServantViewModel = ({
       context,
       servantCount,
       getServants,
+      getFilteredServants,
     },
   }
 }

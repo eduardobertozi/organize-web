@@ -4,6 +4,6 @@ import { Servant } from './servant.index'
 describe('<ServantPage />', () => {
   it('should render', () => {
     const screen = renderView(<Servant />)
-    expect(screen.getByText('Servant')).toBeInTheDocument()
+    expect(screen.getByText('Serviços')).toBeInTheDocument()
   })
 })
