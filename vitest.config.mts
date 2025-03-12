@@ -11,5 +11,6 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
     },
     setupFiles: ['./setup-tests.ts'],
+    exclude: ['./node_modules', './src/components/ui'],
   },
 })
