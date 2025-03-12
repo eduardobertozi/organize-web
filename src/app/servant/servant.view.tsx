@@ -2,8 +2,19 @@ import { PaginatedItemsView } from '@/components/_global/paginated-items/paginat
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { IUseServantViewModel, ServantToJson } from './servant.model'
+import { usePaginatedItemsViewModel } from '@/components/_global/paginated-items/paginated-items.view-model'
 
 export const ServantView: React.FC<IUseServantViewModel> = ({ vm }) => {
+  const paginatedItemsViewModel = usePaginatedItemsViewModel<ServantToJson>({
+    fetchItems: vm.getServants,
+    fetchFilteredItems: vm.getFilteredServants,
+    renderItem: (item) => (
+      <li className="w-full list-none border-b p-2" key={item.id}>
+        {item.name}
+      </li>
+    ),
+  })
+
   return (
     <div className="grid h-screen w-full place-items-center p-6">
       <Card className="container h-full">
@@ -19,13 +30,7 @@ export const ServantView: React.FC<IUseServantViewModel> = ({ vm }) => {
         <CardContent>
           <div className="flex h-full w-full flex-col justify-between">
             <PaginatedItemsView<ServantToJson>
-              fetchItems={vm.getServants}
-              fetchFilteredItems={vm.getFilteredServants}
-              renderItem={(item) => (
-                <li className="w-full list-none border-b p-2" key={item.id}>
-                  {item.name}
-                </li>
-              )}
+              vm={paginatedItemsViewModel.vm}
             />
 
             <p className="p-2 pt-4 text-end text-sm">
