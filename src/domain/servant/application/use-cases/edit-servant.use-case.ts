@@ -33,7 +33,7 @@ export class EditServantUseCase {
     const newNameBelongsToAnotherExistandServant =
       await this.servantRepository.findByName(params.name)
 
-    if (newNameBelongsToAnotherExistandServant) {
+    if (newNameBelongsToAnotherExistandServant!.length > 0) {
       return left(new AlreadyExistsError())
     }
 

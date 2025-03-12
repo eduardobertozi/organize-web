@@ -15,7 +15,7 @@ export class InMemoryServantRepository extends ServantRepository {
   }
 
   async findByName(name: string) {
-    return this.items.find((item) => item.name === name) ?? null
+    return this.items.filter((item) => item.name === name) ?? null
   }
 
   async findAll(page = 1) {

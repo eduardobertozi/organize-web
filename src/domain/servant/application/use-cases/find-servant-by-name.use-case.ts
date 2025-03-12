@@ -10,7 +10,7 @@ interface FindServantByNameUseCaseRequest {
 type FindServantByNameUseCaseResponse = Either<
   NotFoundError,
   {
-    servant: Servant
+    servants: Servant[]
   }
 >
 
@@ -20,14 +20,14 @@ export class FindServantByNameUseCase {
   async execute({
     name,
   }: FindServantByNameUseCaseRequest): Promise<FindServantByNameUseCaseResponse> {
-    const servant = await this.servantRepository.findByName(name)
+    const servants = await this.servantRepository.findByName(name)
 
-    if (!servant) {
+    if (!servants || servants.length < 1) {
       return left(new NotFoundError())
     }
 
     return right({
-      servant,
+      servants,
     })
   }
 }

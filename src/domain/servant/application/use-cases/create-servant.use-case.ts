@@ -22,7 +22,7 @@ export class CreateServantUseCase {
     const servant = Servant.create(params)
     const servantExists = await this.servantRepository.findByName(servant.name)
 
-    if (servantExists) {
+    if (!servantExists || servantExists.length > 0) {
       return left(new AlreadyExistsError())
     }
 
