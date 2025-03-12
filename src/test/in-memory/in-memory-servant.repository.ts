@@ -5,17 +5,13 @@ import { Servant } from '@/domain/servant/enterprise/servant'
 export class InMemoryServantRepository extends ServantRepository {
   public items: Servant[] = []
 
-  constructor(overrideItems?: Servant[]) {
-    super()
-    this.items = overrideItems ?? []
-  }
-
   async findById(id: UniqueEntityID) {
     return this.items.find((item) => item.id.equals(id)) ?? null
   }
 
-  async findByName(name: string) {
-    return this.items.filter((item) => item.name === name) ?? null
+  async findByName(name: string, page = 1) {
+    const filteredItems = this.items.filter((item) => item.name?.includes(name))
+    return filteredItems.slice((page - 1) * 10, page * 10)
   }
 
   async findAll(page = 1) {

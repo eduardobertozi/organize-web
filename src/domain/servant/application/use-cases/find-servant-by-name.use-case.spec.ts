@@ -1,4 +1,3 @@
-import { NotFoundError } from '@/core/errors/not-found.error'
 import { makeServant } from '@/test/factories/make-servant'
 import { InMemoryServantRepository } from '@/test/in-memory/in-memory-servant.repository'
 import { FindServantByNameUseCase } from './find-servant-by-name.use-case'
@@ -54,12 +53,28 @@ describe('Find Servant By Name', () => {
     expect(inMemoryServantRepository.items).toHaveLength(3)
   })
 
-  it('should return error when servant not exists', async () => {
+  it('should be able to find paginated servants', async () => {
+    const tasks: Promise<void>[] = []
+
+    for (let i = 0; i < 12; i++) {
+      tasks.push(
+        inMemoryServantRepository.create(
+          makeServant({
+            name: `Sample servant ${i}`,
+          }),
+        ),
+      )
+    }
+
+    await Promise.all(tasks)
+
     const result = await sut.execute({
       name: 'Sample servant',
+      page: 2,
     })
 
-    expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(NotFoundError)
+    expect(result.isRight()).toBe(true)
+
+    expect(result.value?.servants).toHaveLength(2)
   })
 })

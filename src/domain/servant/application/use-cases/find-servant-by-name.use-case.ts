@@ -1,14 +1,14 @@
-import { Either, left, right } from '@/core/either'
-import { NotFoundError } from '@/core/errors/not-found.error'
+import { Either, right } from '@/core/either'
 import { Servant } from '../../enterprise/servant'
 import { ServantRepository } from '../repositories/servant.repository'
 
 interface FindServantByNameUseCaseRequest {
   name: string
+  page?: number
 }
 
 type FindServantByNameUseCaseResponse = Either<
-  NotFoundError,
+  null,
   {
     servants: Servant[]
   }
@@ -19,12 +19,9 @@ export class FindServantByNameUseCase {
 
   async execute({
     name,
+    page = 1,
   }: FindServantByNameUseCaseRequest): Promise<FindServantByNameUseCaseResponse> {
-    const servants = await this.servantRepository.findByName(name)
-
-    if (!servants || servants.length < 1) {
-      return left(new NotFoundError())
-    }
+    const servants = await this.servantRepository.findByName(name, page)
 
     return right({
       servants,
