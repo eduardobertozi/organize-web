@@ -12,6 +12,7 @@ export class ServantGateway implements ServantRepository {
   async findById(id: UniqueEntityID): Promise<Servant | null> {
     const response = await this.http.get<ServantToJson>({
       url: `${this.baseUrl}/servants/${id.toString()}`,
+      cache: 'force-cache',
     })
 
     if (!response) {

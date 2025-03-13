@@ -8,8 +8,8 @@ import {
 } from './repositories/http.repository'
 
 export class FetchService implements HttpRepository {
-  async get<T>({ url, next }: GetProps): Promise<T> {
-    const response = await fetch(url, { next }).then((res) => res.json())
+  async get<T>({ url, next, cache }: GetProps): Promise<T> {
+    const response = await fetch(url, { next, cache }).then((res) => res.json())
     return response as T
   }
 

@@ -1,5 +1,6 @@
 type DeafultProps = {
   next?: NextFetchRequestConfig
+  cache?: RequestCache
 }
 
 export type GetProps = DeafultProps & {
