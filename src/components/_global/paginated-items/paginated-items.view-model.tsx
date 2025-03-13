@@ -5,12 +5,14 @@ interface UsePaginatedItemsViewModelProps<T> {
   fetchItems: (page: number) => Promise<T[]>
   fetchFilteredItems: (searchText: string, page: number) => Promise<T[]>
   renderItem: (item: T) => React.ReactNode
+  addNewItem: () => void
 }
 
 export const usePaginatedItemsViewModel = <T,>({
   fetchItems,
   fetchFilteredItems,
   renderItem,
+  addNewItem,
 }: UsePaginatedItemsViewModelProps<T>) => {
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -59,6 +61,7 @@ export const usePaginatedItemsViewModel = <T,>({
       items,
       next,
       renderItem,
+      addNewItem,
       debouncedHandleSearch,
     },
   }

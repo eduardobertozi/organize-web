@@ -1,5 +1,6 @@
 export interface IUsePaginatedItemsViewModel<T> {
   vm: {
+    header?: React.ReactNode
     loading: boolean
     hasMore: boolean
     items: T[]
