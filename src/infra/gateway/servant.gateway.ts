@@ -76,8 +76,9 @@ export class ServantGateway {
   }
 
   async delete(servant: ServantJson) {
-    await this.http.delete<void>({
-      url: `${this.baseUrl}/servants/${servant.id.toString()}`,
+    await this.http.delete<void, ServantJson>({
+      url: `${this.baseUrl}/servants`,
+      data: servant,
       next: {
         revalidate: 0,
       },

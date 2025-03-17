@@ -17,8 +17,9 @@ export type PutProps<D> = DeafultProps & {
   data: D
 }
 
-export type DeleteProps = DeafultProps & {
+export type DeleteProps<D> = DeafultProps & {
   url: string
+  data?: D
 }
 
 export type PatchProps<D> = DeafultProps & {
@@ -30,6 +31,6 @@ export interface HttpRepository {
   get<T>(data: GetProps): Promise<T>
   post<T, D>(data: PostProps<D>): Promise<T>
   put<T, D>(data: PutProps<D>): Promise<T>
-  delete<T>(data: DeleteProps): Promise<T>
+  delete<T, D>(data: DeleteProps<D>): Promise<T>
   patch<T, D>(data: PatchProps<D>): Promise<T>
 }

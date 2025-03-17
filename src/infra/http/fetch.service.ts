@@ -33,10 +33,11 @@ export class FetchService implements HttpRepository {
     return response as T
   }
 
-  async delete<T>({ url, next }: DeleteProps): Promise<T> {
+  async delete<T, D>({ url, data, next }: DeleteProps<D>): Promise<T> {
     const response = await fetch(url, {
       method: 'DELETE',
       next,
+      body: JSON.stringify(data),
     }).then((res) => res.json())
 
     return response as T

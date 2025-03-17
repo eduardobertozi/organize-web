@@ -11,6 +11,11 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { debounce } from 'lodash'
 import { FetchService } from '@/infra/http/fetch.service'
 import { ServantGateway } from '@/infra/gateway/servant.gateway'
+import {
+  fetchAllPaginatedServants,
+  fetchAllServants,
+  fetchServantByName,
+} from './actions'
 
 type FetchServants = {
   total: number
@@ -26,16 +31,16 @@ export const ListServants = () => {
   const http = new FetchService()
   const servantGateway = new ServantGateway(http)
 
-  const fetchAllServants = async () => {
+  const handleFetchAllServants = async () => {
     startTransition(async () => {
-      const response = await servantGateway.findAll()
+      const response = await fetchAllServants()
       setServants(response)
     })
   }
 
-  const fetchAllPaginatedServants = async (page: number) => {
+  const handleFetchAllPaginatedServants = async (page: number) => {
     startTransition(async () => {
-      const response = await servantGateway.findAll(page)
+      const response = await fetchAllPaginatedServants(page)
 
       setServants((prev) => ({
         ...response,
@@ -44,12 +49,12 @@ export const ListServants = () => {
     })
   }
 
-  const fetchServantByName = useCallback(
+  const handleFetchServantByName = useCallback(
     // TODO: Implementar paginação em buscas por nome se vier mais de 10 itens
 
     debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
       startTransition(async () => {
-        const response = await servantGateway.findByName(e.target.value)
+        const response = await fetchServantByName(e.target.value)
 
         setServants((prev) => ({
           ...prev!,
@@ -64,17 +69,17 @@ export const ListServants = () => {
     startTransition(async () => {
       await servantGateway.delete(servant)
 
-      fetchAllServants()
+      handleFetchAllServants()
     })
   }
 
   useEffect(() => {
-    fetchAllServants()
+    handleFetchAllServants()
   }, [])
 
   return (
     <div className="space-y-4">
-      <FindServant handleSearch={fetchServantByName} />
+      <FindServant handleSearch={handleFetchServantByName} />
       <CreateItem />
 
       <ScrollArea className="relative h-[300px]">
@@ -93,7 +98,7 @@ export const ListServants = () => {
 
         {servants?.next && (
           <Button
-            onClick={() => fetchAllPaginatedServants(servants.next!)}
+            onClick={() => handleFetchAllPaginatedServants(servants.next!)}
             variant="outline"
             className="z-20 my-10 w-full"
           >
