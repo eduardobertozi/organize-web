@@ -47,7 +47,7 @@ export const ListServants = () => {
 
         {vm.servants &&
           !vm.isPending &&
-          vm.servants.servants.map((servant) => (
+          vm.servants?.servants?.map((servant) => (
             <ListItem
               servant={servant}
               key={servant.id}
@@ -70,7 +70,8 @@ export const ListServants = () => {
       </ScrollArea>
 
       <p className="text-xs text-zinc-300">
-        Exibindo {vm.servants?.servants.length} de {vm.servants?.total} serviços
+        Exibindo {vm.servants?.servants?.length} de {vm.servants?.total}{' '}
+        serviços
       </p>
     </div>
   )

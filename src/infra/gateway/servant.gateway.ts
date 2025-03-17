@@ -7,7 +7,7 @@ import {
 import { revalidatePath } from 'next/cache'
 
 export class ServantGateway {
-  private readonly baseUrl = 'http://localhost:3000/api'
+  private readonly baseUrl = 'http://localhost:8000'
 
   constructor(private readonly http: HttpRepository) {}
 
@@ -66,7 +66,7 @@ export class ServantGateway {
   }
 
   async create(servant: ServantProps): Promise<void> {
-    await this.http.post<void, ServantJson>({
+    await this.http.post<void, ServantProps>({
       url: `${this.baseUrl}/servants`,
       data: servant,
     })
@@ -74,19 +74,18 @@ export class ServantGateway {
     revalidatePath('/servants')
   }
 
-  async save(servant: ServantJson): Promise<void> {
-    await this.http.put<void, ServantJson>({
-      url: `${this.baseUrl}/servants`,
+  async save(servant: Partial<ServantJson>): Promise<void> {
+    await this.http.put<void, Partial<ServantJson>>({
+      url: `${this.baseUrl}/servants/${servant.id}`,
       data: servant,
     })
 
     revalidatePath('/servants')
   }
 
-  async delete(servant: ServantJson) {
-    await this.http.delete<void, ServantJson>({
-      url: `${this.baseUrl}/servants`,
-      data: servant,
+  async delete(id: string) {
+    await this.http.delete<void>({
+      url: `${this.baseUrl}/servants/${id}`,
     })
 
     revalidatePath('/servants')
