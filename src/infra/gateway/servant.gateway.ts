@@ -1,9 +1,10 @@
-import {
-  Servant,
-  ServantJson,
-} from '@/root/core/domain/servant/enterprise/servant'
 import { UniqueEntityID } from '@/root/core/main/unique-entity-id'
 import { HttpRepository } from '../http/repositories/http.repository'
+import {
+  ServantJson,
+  ServantProps,
+} from '@/root/core/domain/servant/enterprise/servant'
+import { revalidatePath } from 'next/cache'
 
 export class ServantGateway {
   private readonly baseUrl = 'http://localhost:3000/api'
@@ -14,6 +15,9 @@ export class ServantGateway {
     const response = await this.http.get<ServantJson>({
       url: `${this.baseUrl}/servants/${id.toString()}`,
       cache: 'force-cache',
+      next: {
+        tags: ['servants'],
+      },
     })
 
     if (!response) {
@@ -27,6 +31,9 @@ export class ServantGateway {
     const response = await this.http.get<{ servants: ServantJson[] }>({
       url: `${this.baseUrl}/servants?q=${name}&page=${page ?? 1}`,
       cache: 'force-cache',
+      next: {
+        tags: ['servants'],
+      },
     })
 
     if (!response) {
@@ -45,6 +52,9 @@ export class ServantGateway {
     }>({
       url: `${this.baseUrl}/servants?page=${page ?? 1}`,
       cache: 'force-cache',
+      next: {
+        tags: ['servants'],
+      },
     })
 
     return {
@@ -55,33 +65,30 @@ export class ServantGateway {
     }
   }
 
-  async create(servant: Servant): Promise<void> {
+  async create(servant: ServantProps): Promise<void> {
     await this.http.post<void, ServantJson>({
       url: `${this.baseUrl}/servants`,
-      data: servant.toJSON(),
-      next: {
-        revalidate: 0,
-      },
+      data: servant,
     })
+
+    revalidatePath('/servants')
   }
 
-  async save(servant: Servant): Promise<void> {
+  async save(servant: ServantJson): Promise<void> {
     await this.http.put<void, ServantJson>({
       url: `${this.baseUrl}/servants`,
-      data: servant.toJSON(),
-      next: {
-        revalidate: 0,
-      },
+      data: servant,
     })
+
+    revalidatePath('/servants')
   }
 
   async delete(servant: ServantJson) {
     await this.http.delete<void, ServantJson>({
       url: `${this.baseUrl}/servants`,
       data: servant,
-      next: {
-        revalidate: 0,
-      },
     })
+
+    revalidatePath('/servants')
   }
 }

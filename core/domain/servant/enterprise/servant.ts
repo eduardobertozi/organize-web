@@ -89,5 +89,5 @@ export class Servant extends Entity<ServantProps> {
 }
 
 export interface ServantJson extends ServantProps {
-  id: string
+  id?: string
 }

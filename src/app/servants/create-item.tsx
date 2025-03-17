@@ -1,7 +1,6 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
   Sheet,
   SheetContent,
@@ -33,9 +32,7 @@ export const CreateItem: React.FC<CreateItemProps> = ({ children }) => {
           </SheetDescription>
         </SheetHeader>
 
-        <ScrollArea className="max-h-[300px] min-h-[180px] p-4">
-          {children}
-        </ScrollArea>
+        {children}
       </SheetContent>
     </Sheet>
   )

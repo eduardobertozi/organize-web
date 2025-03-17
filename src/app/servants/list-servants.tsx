@@ -2,20 +2,24 @@
 
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { ServantJson } from '@/root/core/domain/servant/enterprise/servant'
-import { useCallback, useEffect, useState, useTransition } from 'react'
-import { CreateItem } from './create-item'
-import { FindServant } from './find-servant'
-import { ListItem } from './list-item'
 import { Skeleton } from '@/components/ui/skeleton'
-import { debounce } from 'lodash'
-import { FetchService } from '@/infra/http/fetch.service'
-import { ServantGateway } from '@/infra/gateway/servant.gateway'
 import {
+  ServantJson,
+  ServantProps,
+} from '@/root/core/domain/servant/enterprise/servant'
+import { debounce } from 'lodash'
+import { useCallback, useEffect, useState, useTransition } from 'react'
+import {
+  createServant,
+  deleteServant,
   fetchAllPaginatedServants,
   fetchAllServants,
   fetchServantByName,
 } from './actions'
+import { CreateItem } from './create-item'
+import { FindServant } from './find-servant'
+import { FormServant } from './form'
+import { ListItem } from './list-item'
 
 type FetchServants = {
   total: number
@@ -27,9 +31,6 @@ type FetchServants = {
 export const ListServants = () => {
   const [servants, setServants] = useState<FetchServants | null>(null)
   const [isPending, startTransition] = useTransition()
-
-  const http = new FetchService()
-  const servantGateway = new ServantGateway(http)
 
   const handleFetchAllServants = async () => {
     startTransition(async () => {
@@ -67,8 +68,14 @@ export const ListServants = () => {
 
   const handleDeleteServant = async (servant: ServantJson) => {
     startTransition(async () => {
-      await servantGateway.delete(servant)
+      await deleteServant(servant)
+      handleFetchAllServants()
+    })
+  }
 
+  const handleCreateServant = async (servant: ServantProps) => {
+    startTransition(async () => {
+      await createServant(servant)
       handleFetchAllServants()
     })
   }
@@ -80,7 +87,9 @@ export const ListServants = () => {
   return (
     <div className="space-y-4">
       <FindServant handleSearch={handleFetchServantByName} />
-      <CreateItem />
+      <CreateItem>
+        <FormServant createServant={handleCreateServant} />
+      </CreateItem>
 
       <ScrollArea className="relative h-[300px]">
         <div className="from-background absolute top-0 right-0 left-0 z-10 h-4 bg-gradient-to-b to-transparent" />
