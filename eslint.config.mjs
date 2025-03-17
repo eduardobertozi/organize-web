@@ -17,6 +17,7 @@ export default [
   {
     rules: {
       'no-console': 'error',
+      'no-explicity-any': 'warn',
     },
   },
 ]

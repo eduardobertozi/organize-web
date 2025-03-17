@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { XIcon } from 'lucide-react'
-import { ListServants } from './list-servants'
+import { ListServants } from './components/list-servants/list-servants'
 
 export const ServantsPage = async () => {
   return (

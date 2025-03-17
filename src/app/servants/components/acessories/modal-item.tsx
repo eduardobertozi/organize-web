@@ -11,11 +11,11 @@ import {
 } from '@/components/ui/sheet'
 import { PlusIcon } from 'lucide-react'
 
-type CreateItemProps = {
+type ModalItemProps = {
   children?: React.ReactNode
 }
 
-export const CreateItem: React.FC<CreateItemProps> = ({ children }) => {
+export const ModalItem: React.FC<ModalItemProps> = ({ children }) => {
   return (
     <Sheet>
       <SheetTrigger asChild>

@@ -1,8 +1,3 @@
-'use client'
-
-import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Skeleton } from '@/components/ui/skeleton'
 import {
   ServantJson,
   ServantProps,
@@ -15,20 +10,10 @@ import {
   fetchAllPaginatedServants,
   fetchAllServants,
   fetchServantByName,
-} from './actions'
-import { CreateItem } from './create-item'
-import { FindServant } from './find-servant'
-import { FormServant } from './form'
-import { ListItem } from './list-item'
+} from './list-servants.actions'
+import { FetchServants } from './list-servants.types'
 
-type FetchServants = {
-  total: number
-  next: number | null
-  previous: number | null
-  servants: ServantJson[]
-}
-
-export const ListServants = () => {
+export const useListServants = () => {
   const [servants, setServants] = useState<FetchServants | null>(null)
   const [isPending, startTransition] = useTransition()
 
@@ -84,41 +69,13 @@ export const ListServants = () => {
     handleFetchAllServants()
   }, [])
 
-  return (
-    <div className="space-y-4">
-      <FindServant handleSearch={handleFetchServantByName} />
-      <CreateItem>
-        <FormServant createServant={handleCreateServant} />
-      </CreateItem>
-
-      <ScrollArea className="relative h-[300px]">
-        <div className="from-background absolute top-0 right-0 left-0 z-10 h-4 bg-gradient-to-b to-transparent" />
-        <div className="from-background absolute right-0 bottom-0 left-0 z-10 h-10 bg-gradient-to-t to-transparent" />
-
-        {isPending && <Skeleton className="mt-4 h-10 w-full" />}
-
-        {servants?.servants?.map((servant) => (
-          <ListItem
-            name={servant.name}
-            key={servant.id}
-            handleDelete={() => handleDeleteServant(servant)}
-          />
-        ))}
-
-        {servants?.next && (
-          <Button
-            onClick={() => handleFetchAllPaginatedServants(servants.next!)}
-            variant="outline"
-            className="z-20 my-10 w-full"
-          >
-            Ver mais
-          </Button>
-        )}
-      </ScrollArea>
-
-      <p className="text-xs text-zinc-300">
-        Exibindo {servants?.servants.length} de {servants?.total} serviços
-      </p>
-    </div>
-  )
+  return {
+    servants,
+    isPending,
+    handleFetchAllServants,
+    handleFetchAllPaginatedServants,
+    handleFetchServantByName,
+    handleDeleteServant,
+    handleCreateServant,
+  }
 }

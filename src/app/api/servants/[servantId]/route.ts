@@ -8,7 +8,7 @@ export async function GET(
   const { servantId } = await params
 
   return Response.json({
-    servants: servants.find((servant) => servant.id === servantId),
+    servant: servants.find((servant) => servant.id === servantId),
   })
 }
 

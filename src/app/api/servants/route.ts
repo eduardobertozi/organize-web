@@ -7,11 +7,15 @@ export async function GET(request: NextRequest) {
   const page = searchParams.get('page') ?? 1
   const q = searchParams.get('q')
 
+  const sortedServants = servants.sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  )
+
   return Response.json({
-    total: servants.length,
-    next: +page < Math.ceil(servants.length / 10) ? +page + 1 : null,
+    total: sortedServants.length,
+    next: +page < Math.ceil(sortedServants.length / 10) ? +page + 1 : null,
     previous: +page > 1 ? +page - 1 : null,
-    servants: servants
+    servants: sortedServants
       .filter((servant) => {
         if (q) {
           return servant.name.includes(q)
