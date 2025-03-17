@@ -1,21 +1,20 @@
-import { servants } from '@/test/data/servants.json'
+import { servants } from '@/services/database.json'
 import { NextRequest } from 'next/server'
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
 
   const page = searchParams.get('page') ?? 1
-  const name = searchParams.get('name')
+  const q = searchParams.get('q')
 
   return Response.json({
     total: servants.length,
-    pages: Math.ceil(servants.length / 10),
     next: +page < Math.ceil(servants.length / 10) ? +page + 1 : null,
     previous: +page > 1 ? +page - 1 : null,
     servants: servants
       .filter((servant) => {
-        if (name) {
-          return servant.name.includes(name)
+        if (q) {
+          return servant.name.includes(q)
         }
 
         return true

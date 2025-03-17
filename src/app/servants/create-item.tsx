@@ -1,0 +1,42 @@
+'use client'
+
+import { Button } from '@/components/ui/button'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import { PlusIcon } from 'lucide-react'
+
+type CreateItemProps = {
+  children?: React.ReactNode
+}
+
+export const CreateItem: React.FC<CreateItemProps> = ({ children }) => {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline" className="w-full sm:w-auto">
+          Novo <PlusIcon size={24} />
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="bottom" className="p-4">
+        <SheetHeader>
+          <SheetTitle>Serviço</SheetTitle>
+
+          <SheetDescription>
+            Adicione, edite ou exclua um serviço.
+          </SheetDescription>
+        </SheetHeader>
+
+        <ScrollArea className="max-h-[300px] min-h-[180px] p-4">
+          {children}
+        </ScrollArea>
+      </SheetContent>
+    </Sheet>
+  )
+}

@@ -1,4 +1,4 @@
-import { servants } from '@/test/data/servants.json'
+import { servants } from '@/services/database.json'
 import { NextRequest } from 'next/server'
 
 export async function GET(
