@@ -6,58 +6,69 @@ import { toast } from 'sonner'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Option } from '@/components/ui/expansions/multiple-selector'
 import { FormServant } from './form-servant.types'
-import { ServantProps } from '@/root/core/domain/servant/enterprise/servant'
 import { FormServantSchema } from './form-servant.schema'
+import { FormServantProps } from './form-servant'
 
-type UseFormServantProps = {
-  createServant: (servant: ServantProps) => Promise<void>
-}
+export type UseFormServantProps = FormServantProps
 
 export const useFormServant = (props: UseFormServantProps) => {
-  const router = useRouter()
   const [products, setProducts] = useState<Option[]>([])
+  const [selectedProducts, setSelectedProducts] = useState<Option[]>([])
   const [totalProductsPrice, setTotalProductsPrice] = useState(0)
 
   const form = useForm<FormServant>({
     resolver: zodResolver(FormServantSchema),
     defaultValues: {
-      name: '',
+      id: props.defaultServant?.id ?? null,
+      name: props.defaultServant?.name ?? '',
       productIds: [],
-      profitPercent: 0,
-      workForcePrice: 0,
+      profitPercent: props.defaultServant?.profitPercent ?? 0,
+      workForcePrice: props.defaultServant?.workForcePrice ?? 0,
     },
   })
 
   const fetchAllProducts = async () => {
-    const result = await new Promise<any>((resolve) => {
+    const result = await new Promise<
+      { id: string; name: string; price: number }[]
+    >((resolve) => {
       setTimeout(() => {
         resolve([
           {
-            id: 'erer46e-we6r4ew6r8w-wer68wer46w',
+            id: 'product-1',
             name: 'Produto Teste 1',
-            value: 11.92,
+            price: 11.92,
           },
           {
-            id: 'g4sdfg8-fdgf46dfg-asdffh64354354',
+            id: 'product-2',
             name: 'Produto Teste 2',
-            value: 15.92,
+            price: 15.92,
           },
           {
-            id: 'asd-esedfsdfsdf-t43546-fge5y6y5f',
+            id: 'product-3',
             name: 'Produto Teste 3',
-            value: 18.92,
+            price: 18.92,
           },
         ])
       }, 1000)
     })
 
-    const productsToOptions = result.map((product: any) => ({
+    const productsToOptions = result.map((product) => ({
       label: product.name,
       value: product.id,
     }))
 
+    setSelectedProducts(
+      productsToOptions.filter((product) =>
+        props.defaultServant?.productIds.includes(product.value),
+      ),
+    )
+
     setTotalProductsPrice(
-      result.reduce((acc: number, product: any) => acc + product.value, 0),
+      result.reduce(
+        (acc: number, product: { id: string; name: string; price: number }) =>
+          acc + product.price,
+        0,
+      ),
     )
     setProducts(productsToOptions)
   }
@@ -67,21 +78,32 @@ export const useFormServant = (props: UseFormServantProps) => {
   }, [])
 
   const onSubmit = async (data: FormServant) => {
-    const products = data.productIds.map((product) => product.value)
+    const productIds = data.productIds.map((product) => product.value)
 
-    await props.createServant({
-      ...data,
-      productIds: products,
-      productsPrice: totalProductsPrice,
-      createdAt: new Date(),
-    })
+    if (props.createServant) {
+      await props.createServant({
+        ...data,
+        productIds,
+        productsPrice: totalProductsPrice,
+        createdAt: new Date(),
+      })
+      toast.success('Serviço criado com sucesso.')
+    }
 
-    toast.success('Serviço criado com sucesso.')
-    router.refresh()
+    if (props.editServant) {
+      await props.editServant({
+        ...data,
+        productIds,
+        productsPrice: totalProductsPrice,
+        updatedAt: new Date(),
+      })
+      toast.success('Serviço editado com sucesso.')
+    }
   }
 
   return {
     products,
+    selectedProducts,
     form,
     onSubmit,
   }

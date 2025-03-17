@@ -10,7 +10,8 @@ import {
   fetchAllPaginatedServants,
   fetchAllServants,
   fetchServantByName,
-} from './list-servants.actions'
+  updateServant,
+} from '../../servants.actions'
 import { FetchServants } from './list-servants.types'
 
 export const useListServants = () => {
@@ -65,6 +66,13 @@ export const useListServants = () => {
     })
   }
 
+  const handleEditServant = async (servant: ServantProps) => {
+    startTransition(async () => {
+      await updateServant(servant)
+      handleFetchAllServants()
+    })
+  }
+
   useEffect(() => {
     handleFetchAllServants()
   }, [])
@@ -77,5 +85,6 @@ export const useListServants = () => {
     handleFetchServantByName,
     handleDeleteServant,
     handleCreateServant,
+    handleEditServant,
   }
 }

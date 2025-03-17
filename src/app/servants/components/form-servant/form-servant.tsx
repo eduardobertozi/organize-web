@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import MultipleSelector from '@/components/ui/expansions/multiple-selector'
+import { MultipleSelector } from '@/components/ui/expansions/multiple-selector'
 import {
   Form,
   FormControl,
@@ -10,28 +10,32 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import {
+  ServantJson,
+  ServantProps,
+} from '@/root/core/domain/servant/enterprise/servant'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
-import { ServantProps } from '@/root/core/domain/servant/enterprise/servant'
 import { useFormServant } from './use-form-servant'
 
-type FormServantProps = {
-  createServant: (servant: ServantProps) => Promise<void>
+export type FormServantProps = {
+  defaultServant?: ServantJson
+  createServant?: (servant: ServantProps) => Promise<void>
+  editServant?: (servant: ServantJson) => Promise<void>
 }
 
 export const FormServant = (props: FormServantProps) => {
-  const { form, products, onSubmit } = useFormServant(props)
+  const vm = useFormServant(props)
 
   return (
-    <Form {...form}>
+    <Form {...vm.form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="relative space-y-8 p-4"
+        onSubmit={vm.form.handleSubmit(vm.onSubmit)}
+        className="space-y-8 p-4"
       >
-        <div className="from-background absolute right-0 bottom-10 left-0 z-10 h-10 bg-gradient-to-t to-transparent" />
-        <ScrollArea className="h-[300px] w-full space-y-4 overflow-y-scroll p-2">
+        <ScrollArea className="h-[300px] w-full space-y-4 p-2">
           <FormField
             name="name"
-            control={form.control}
+            control={vm.form.control}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Nome Serviço</FormLabel>
@@ -43,7 +47,7 @@ export const FormServant = (props: FormServantProps) => {
             )}
           />
           <FormField
-            control={form.control}
+            control={vm.form.control}
             name="productIds"
             render={({ field }) => (
               <FormItem>
@@ -51,13 +55,10 @@ export const FormServant = (props: FormServantProps) => {
                 <FormControl>
                   <MultipleSelector
                     {...field}
-                    options={products}
+                    value={vm.selectedProducts}
+                    options={vm.products}
                     placeholder="Selecione um ou mais produtos."
-                    emptyIndicator={
-                      <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
-                        no results found.
-                      </p>
-                    }
+                    emptyIndicator="Nenhum produto encontrado."
                   />
                 </FormControl>
                 <FormMessage />
@@ -66,7 +67,7 @@ export const FormServant = (props: FormServantProps) => {
           />
           <FormField
             name="profitPercent"
-            control={form.control}
+            control={vm.form.control}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Margem de Lucro (%)</FormLabel>
@@ -79,7 +80,7 @@ export const FormServant = (props: FormServantProps) => {
           />
           <FormField
             name="workForcePrice"
-            control={form.control}
+            control={vm.form.control}
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Custo mão de obra (R$)</FormLabel>

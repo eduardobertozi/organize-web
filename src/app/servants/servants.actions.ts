@@ -3,6 +3,7 @@
 import { ServantGateway } from '@/infra/gateway/servant.gateway'
 import { FetchService } from '@/infra/http/fetch.service'
 import { ServantJson } from '@/root/core/domain/servant/enterprise/servant'
+import { makeServant } from '@/root/core/test/factories/make-servant'
 
 const http = new FetchService()
 const servantGateway = new ServantGateway(http)
@@ -23,7 +24,12 @@ export const fetchServantByName = async (name: string) => {
 }
 
 export const createServant = async (servant: ServantJson) => {
-  await servantGateway.create(servant)
+  const newServant = makeServant(servant)
+  await servantGateway.create(newServant.toJSON())
+}
+
+export const updateServant = async (servant: ServantJson) => {
+  await servantGateway.save(servant)
 }
 
 export const deleteServant = async (servant: ServantJson) => {

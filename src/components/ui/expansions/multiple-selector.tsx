@@ -406,7 +406,7 @@ const MultipleSelector = React.forwardRef<
       if (onSearch && !creatable && Object.keys(options).length === 0) {
         return (
           <CommandItem value="-" disabled>
-            {emptyIndicator}
+            <p className="text-muted text-xs">{emptyIndicator}</p>
           </CommandItem>
         )
       }
@@ -630,4 +630,4 @@ const MultipleSelector = React.forwardRef<
 )
 
 MultipleSelector.displayName = 'MultipleSelector'
-export default MultipleSelector
+export { MultipleSelector }

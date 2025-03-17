@@ -8,7 +8,7 @@ export interface ServantProps {
   productsPrice: number
   workForcePrice: number
   profitPercent: number
-  createdAt: Date
+  createdAt?: Date | null
   updatedAt?: Date | null
 }
 
@@ -58,7 +58,7 @@ export class Servant extends Entity<ServantProps> {
     this.touch()
   }
 
-  get createdAt(): Date {
+  get createdAt(): Date | null | undefined {
     return this.props.createdAt
   }
 
@@ -89,5 +89,5 @@ export class Servant extends Entity<ServantProps> {
 }
 
 export interface ServantJson extends ServantProps {
-  id?: string
+  id?: string | null
 }

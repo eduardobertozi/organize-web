@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import {
   Sheet,
   SheetContent,
@@ -9,20 +8,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { PlusIcon } from 'lucide-react'
 
 type ModalItemProps = {
-  children?: React.ReactNode
+  trigger: React.JSX.Element
+  formItem: React.JSX.Element
 }
 
-export const ModalItem: React.FC<ModalItemProps> = ({ children }) => {
+export const ModalItem: React.FC<ModalItemProps> = ({ trigger, formItem }) => {
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline" className="w-full sm:w-auto">
-          Novo <PlusIcon size={24} />
-        </Button>
-      </SheetTrigger>
+      <SheetTrigger asChild>{trigger}</SheetTrigger>
       <SheetContent side="bottom" className="p-4">
         <SheetHeader>
           <SheetTitle>Serviço</SheetTitle>
@@ -32,7 +27,7 @@ export const ModalItem: React.FC<ModalItemProps> = ({ children }) => {
           </SheetDescription>
         </SheetHeader>
 
-        {children}
+        {formItem}
       </SheetContent>
     </Sheet>
   )

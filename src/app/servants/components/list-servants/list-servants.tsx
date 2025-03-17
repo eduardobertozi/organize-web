@@ -3,11 +3,19 @@
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
-import { ModalItem } from '../acessories/modal-item'
 import { FindServant } from '../acessories/find-servant'
 import { FormServant } from '../form-servant/form-servant'
 import { ListItem } from '../acessories/list-item'
 import { useListServants } from './use-list-servants'
+import { PlusIcon } from 'lucide-react'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 
 export const ListServants = () => {
   const vm = useListServants()
@@ -15,23 +23,36 @@ export const ListServants = () => {
   return (
     <div className="space-y-4">
       <FindServant handleSearch={vm.handleFetchServantByName} />
-      <ModalItem>
-        <FormServant createServant={vm.handleCreateServant} />
-      </ModalItem>
 
-      <ScrollArea className="relative h-[300px]">
-        <div className="from-background absolute top-0 right-0 left-0 z-10 h-4 bg-gradient-to-b to-transparent" />
-        <div className="from-background absolute right-0 bottom-0 left-0 z-10 h-10 bg-gradient-to-t to-transparent" />
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline" className="w-full sm:w-auto">
+            Novo <PlusIcon size={24} />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="bottom" className="p-4">
+          <SheetHeader>
+            <SheetTitle>Serviço</SheetTitle>
+            <SheetDescription>
+              Adicione, edite ou exclua um serviço.
+            </SheetDescription>
+          </SheetHeader>
 
+          <FormServant createServant={vm.handleCreateServant} />
+        </SheetContent>
+      </Sheet>
+
+      <ScrollArea className="h-[300px]">
         {vm.isPending && <Skeleton className="mt-4 h-10 w-full" />}
 
         {vm.servants &&
           !vm.isPending &&
           vm.servants.servants.map((servant) => (
             <ListItem
-              name={servant.name}
+              servant={servant}
               key={servant.id}
-              handleDelete={() => vm.handleDeleteServant(servant)}
+              handleDelete={vm.handleDeleteServant}
+              handleEdit={vm.handleEditServant}
             />
           ))}
 

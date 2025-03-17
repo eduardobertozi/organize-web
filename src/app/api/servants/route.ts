@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
   const q = searchParams.get('q')
 
   const sortedServants = servants.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
   )
 
   return Response.json({
