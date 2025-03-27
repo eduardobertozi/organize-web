@@ -13,6 +13,8 @@ export interface ServantProps {
 }
 
 export class Servant extends Entity<ServantProps> {
+  private _price: number = 0
+
   get name(): string {
     return this.props.name
   }
@@ -20,6 +22,10 @@ export class Servant extends Entity<ServantProps> {
   set name(name: string) {
     this.props.name = name
     this.touch()
+  }
+
+  get price(): number {
+    return this._price
   }
 
   get productIds(): string[] {
@@ -71,6 +77,11 @@ export class Servant extends Entity<ServantProps> {
   }
 
   private touch() {
+    this._price =
+      this.productsPrice +
+      this.workForcePrice +
+      (this.productsPrice * this.profitPercent) / 100
+
     this.props.updatedAt = new Date()
   }
 
@@ -86,8 +97,4 @@ export class Servant extends Entity<ServantProps> {
       id,
     )
   }
-}
-
-export interface ServantJson extends ServantProps {
-  id: string
 }
