@@ -10,17 +10,15 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import {
-  ServantJson,
-  ServantProps,
-} from '@/root/core/domain/servant/enterprise/servant'
+
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import { useFormServant } from './use-form-servant'
+import { Servant, ServantRequest } from '@/app/servants/servant.model'
 
 export type FormServantProps = {
-  defaultServant?: ServantJson
-  createServant?: (servant: ServantProps) => Promise<void>
-  editServant?: (servant: ServantJson) => Promise<void>
+  defaultServant?: Servant
+  createServant?: (servant: ServantRequest) => Promise<void>
+  editServant?: (servant: Servant) => Promise<void>
 }
 
 export const FormServant = (props: FormServantProps) => {
@@ -48,7 +46,7 @@ export const FormServant = (props: FormServantProps) => {
           />
           <FormField
             control={vm.form.control}
-            name="productIds"
+            name="products"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Produtos vinculados</FormLabel>

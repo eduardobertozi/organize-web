@@ -1,8 +1,8 @@
-import { ServantJson } from '@/root/core/domain/servant/enterprise/servant'
+import { Servant } from '@/app/servants/servant.model'
 
 export type FetchServants = {
   total: number
   next: number | null
   previous: number | null
-  servants: ServantJson[]
+  servants: Servant[]
 }

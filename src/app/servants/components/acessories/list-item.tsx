@@ -9,13 +9,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { ServantJson } from '@/root/core/domain/servant/enterprise/servant'
 import { FormServant } from '../form-servant/form-servant'
+import { Servant } from '@/app/servants/servant.model'
 
 type ListItemProps = {
-  servant: ServantJson
-  handleDelete: (servant: ServantJson) => Promise<void>
-  handleEdit: (servant: ServantJson) => Promise<void>
+  servant: Servant
+  handleDelete: (servant: Servant) => Promise<void>
+  handleEdit: (servant: Servant) => Promise<void>
 }
 
 export const ListItem: React.FC<ListItemProps> = ({

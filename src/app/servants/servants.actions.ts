@@ -1,38 +1,75 @@
 'use server'
 
-import { ServantGateway } from '@/infra/gateway/servant.gateway'
-import { FetchService } from '@/infra/http/fetch.service'
-import { ServantJson } from '@/root/core/domain/servant/enterprise/servant'
-import { Optional } from '@/root/core/main/optional'
-import { makeServant } from '@/root/core/test/factories/make-servant'
+import { Servant, ServantRequest } from '@/app/servants/servant.model'
+import { FetchService } from '@/services/fetch.service'
+import { revalidatePath } from 'next/cache'
+import { FetchServants } from './components/list-servants/list-servants.types'
+import { env } from '@/env'
 
 const http = new FetchService()
-const servantGateway = new ServantGateway(http)
+const baseUrl = `${env.API_BASE_URL}/servants`
 
-export const fetchAllServants = async () => {
-  const response = await servantGateway.findAll()
+export const fetchAllServants = async (page: number) => {
+  const response = await http.get<FetchServants>({
+    url: `${baseUrl}/all?page=${page}`,
+    headers: {
+      Authorization: `Bearer ${env.API_TOKEN}`,
+    },
+    cache: 'force-cache',
+  })
+
   return response
 }
 
-export const fetchAllPaginatedServants = async (page: number) => {
-  const response = await servantGateway.findAll(page)
+export const fetchServantByName = async (name: string, page?: number) => {
+  const response = await http.get<FetchServants>({
+    url: `${baseUrl}?name=${name}&page=${page ?? 1}`,
+    cache: 'force-cache',
+    headers: {
+      Authorization: `Bearer ${env.API_TOKEN}`,
+    },
+  })
+
   return response
 }
 
-export const fetchServantByName = async (name: string) => {
-  const response = await servantGateway.findByName(name)
+export const createServant = async (servant: ServantRequest) => {
+  const response = await http.post<Servant, ServantRequest>({
+    url: baseUrl,
+    data: servant,
+    headers: {
+      Authorization: `Bearer ${env.API_TOKEN}`,
+    },
+  })
+
+  revalidatePath('/servants')
+
   return response
 }
 
-export const createServant = async (servant: Optional<ServantJson, 'id'>) => {
-  const newServant = makeServant(servant)
-  await servantGateway.create(newServant.toJSON())
+export const updateServant = async ({ id, ...servant }: ServantRequest) => {
+  const response = await http.put<Servant, ServantRequest>({
+    url: `${baseUrl}/${id}`,
+    data: servant,
+    headers: {
+      Authorization: `Bearer ${env.API_TOKEN}`,
+    },
+  })
+
+  revalidatePath('/servants')
+
+  return response
 }
 
-export const updateServant = async (servant: ServantJson) => {
-  await servantGateway.save(servant)
-}
+export const deleteServant = async (servantId: string) => {
+  const response = await http.delete<void>({
+    url: `${baseUrl}/${servantId}`,
+    headers: {
+      Authorization: `Bearer ${env.API_TOKEN}`,
+    },
+  })
 
-export const deleteServant = async (id: string) => {
-  await servantGateway.delete(id)
+  revalidatePath('/servants')
+
+  return response
 }

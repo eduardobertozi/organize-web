@@ -1,87 +1,68 @@
-import {
-  ServantJson,
-  ServantProps,
-} from '@/root/core/domain/servant/enterprise/servant'
 import { debounce } from 'lodash'
 import { useCallback, useEffect, useState, useTransition } from 'react'
+import { FetchServants } from './list-servants.types'
+import { Servant, ServantRequest } from '../../servant.model'
 import {
   createServant,
   deleteServant,
-  fetchAllPaginatedServants,
   fetchAllServants,
   fetchServantByName,
   updateServant,
 } from '../../servants.actions'
-import { FetchServants } from './list-servants.types'
 
 export const useListServants = () => {
-  const [servants, setServants] = useState<FetchServants | null>(null)
+  const [servantsResponse, setServantsResponse] =
+    useState<FetchServants | null>(null)
   const [isPending, startTransition] = useTransition()
 
-  const handleFetchAllServants = async () => {
+  const handleFetchAllServants = async (page?: number | null) => {
     startTransition(async () => {
-      const response = await fetchAllServants()
-      setServants(response)
-    })
-  }
-
-  const handleFetchAllPaginatedServants = async (page: number) => {
-    startTransition(async () => {
-      const response = await fetchAllPaginatedServants(page)
-
-      setServants((prev) => ({
-        ...response,
-        servants: [...prev!.servants, ...response.servants],
-      }))
+      const data = await fetchAllServants(page ?? 1)
+      setServantsResponse(data)
     })
   }
 
   const handleFetchServantByName = useCallback(
-    // TODO: Implementar paginação em buscas por nome se vier mais de 10 itens
-
     debounce(async (e: React.ChangeEvent<HTMLInputElement>) => {
       startTransition(async () => {
-        const response = await fetchServantByName(e.target.value)
+        const name = e.target.value
+        const data = await fetchServantByName(name)
 
-        setServants((prev) => ({
-          ...prev!,
-          servants: response,
-        }))
+        setServantsResponse(data)
       })
     }, 800),
     [],
   )
 
-  const handleDeleteServant = async (servant: ServantJson) => {
-    startTransition(async () => {
-      await deleteServant(servant)
-      handleFetchAllServants()
-    })
-  }
-
-  const handleCreateServant = async (servant: ServantProps) => {
+  const handleCreateServant = async (servant: ServantRequest) => {
     startTransition(async () => {
       await createServant(servant)
-      handleFetchAllServants()
+      await handleFetchAllServants()
     })
   }
 
-  const handleEditServant = async (servant: ServantProps) => {
+  const handleEditServant = async (servant: Servant) => {
     startTransition(async () => {
       await updateServant(servant)
-      handleFetchAllServants()
+      await handleFetchAllServants()
+    })
+  }
+
+  const handleDeleteServant = async ({ id }: Servant) => {
+    startTransition(async () => {
+      await deleteServant(id)
+      await handleFetchAllServants()
     })
   }
 
   useEffect(() => {
-    handleFetchAllServants()
+    void handleFetchAllServants()
   }, [])
 
   return {
-    servants,
+    servantsResponse,
     isPending,
     handleFetchAllServants,
-    handleFetchAllPaginatedServants,
     handleFetchServantByName,
     handleDeleteServant,
     handleCreateServant,

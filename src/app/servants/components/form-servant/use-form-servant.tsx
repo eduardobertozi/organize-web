@@ -21,7 +21,7 @@ export const useFormServant = (props: UseFormServantProps) => {
     defaultValues: {
       id: props.defaultServant?.id ?? null,
       name: props.defaultServant?.name ?? '',
-      productIds: [],
+      products: [],
       profitPercent: props.defaultServant?.profitPercent ?? 0,
       workForcePrice: props.defaultServant?.workForcePrice ?? 0,
     },
@@ -57,12 +57,6 @@ export const useFormServant = (props: UseFormServantProps) => {
       value: product.id,
     }))
 
-    setSelectedProducts(
-      productsToOptions.filter((product) =>
-        props.defaultServant?.productIds.includes(product.value),
-      ),
-    )
-
     setTotalProductsPrice(
       result.reduce(
         (acc: number, product: { id: string; name: string; price: number }) =>
@@ -74,29 +68,25 @@ export const useFormServant = (props: UseFormServantProps) => {
   }
 
   useEffect(() => {
-    fetchAllProducts()
+    void fetchAllProducts()
   }, [])
 
   const onSubmit = async (data: FormServant) => {
-    const productIds = data.productIds.map((product) => product.value)
+    const productsIds = data.products.map((product) => product.value)
+    const { id, products, ...rest } = data
 
     if (props.createServant) {
       await props.createServant({
-        ...data,
-        productIds,
+        name: data.name,
+        profitPercent: data.profitPercent,
+        workForcePrice: data.workForcePrice,
         productsPrice: totalProductsPrice,
-        createdAt: new Date(),
       })
       toast.success('Serviço criado com sucesso.')
     }
 
     if (props.editServant) {
-      await props.editServant({
-        ...data,
-        productIds,
-        productsPrice: totalProductsPrice,
-        updatedAt: new Date(),
-      })
+      await props.editServant(rest)
       toast.success('Serviço editado com sucesso.')
     }
   }

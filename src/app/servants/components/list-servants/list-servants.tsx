@@ -45,9 +45,9 @@ export const ListServants = () => {
       <ScrollArea className="h-[300px]">
         {vm.isPending && <Skeleton className="mt-4 h-10 w-full" />}
 
-        {vm.servants &&
+        {vm.servantsResponse &&
           !vm.isPending &&
-          vm.servants?.servants?.map((servant) => (
+          vm.servantsResponse?.servants?.map((servant) => (
             <ListItem
               servant={servant}
               key={servant.id}
@@ -56,11 +56,9 @@ export const ListServants = () => {
             />
           ))}
 
-        {vm.servants?.next && (
+        {vm.servantsResponse?.next && (
           <Button
-            onClick={() =>
-              vm.handleFetchAllPaginatedServants(vm.servants!.next!)
-            }
+            onClick={() => vm.handleFetchAllServants(vm.servantsResponse?.next)}
             variant="outline"
             className="z-20 my-10 w-full"
           >
@@ -70,8 +68,8 @@ export const ListServants = () => {
       </ScrollArea>
 
       <p className="text-xs text-zinc-300">
-        Exibindo {vm.servants?.servants?.length} de {vm.servants?.total}{' '}
-        serviços
+        Exibindo {vm.servantsResponse?.servants?.length} de{' '}
+        {vm.servantsResponse?.total} serviços
       </p>
     </div>
   )

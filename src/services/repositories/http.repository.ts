@@ -1,4 +1,5 @@
 type DeafultProps = {
+  headers?: HeadersInit
   next?: NextFetchRequestConfig
   cache?: RequestCache
 }
