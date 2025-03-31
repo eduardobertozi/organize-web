@@ -9,16 +9,18 @@ import {
   fetchServantByName,
   updateServant,
 } from '../../servants.actions'
+import { useServantsContext } from '../../servants.context'
+import { toast } from 'sonner'
 
 export const useListServants = () => {
-  const [servantsResponse, setServantsResponse] =
-    useState<FetchServants | null>(null)
+  const { servantsResponse, changeServantsResponse } = useServantsContext()
   const [isPending, startTransition] = useTransition()
 
   const handleFetchAllServants = async (page?: number | null) => {
     startTransition(async () => {
       const data = await fetchAllServants(page ?? 1)
-      setServantsResponse(data)
+      console.log(data)
+      changeServantsResponse(data)
     })
   }
 
@@ -28,23 +30,37 @@ export const useListServants = () => {
         const name = e.target.value
         const data = await fetchServantByName(name)
 
-        setServantsResponse(data)
+        changeServantsResponse(data)
       })
     }, 800),
     [],
   )
 
-  const handleCreateServant = async (servant: ServantRequest) => {
+  const handleCreateServant = (servant: ServantRequest) => {
     startTransition(async () => {
-      await createServant(servant)
-      await handleFetchAllServants()
+      try {
+        const { message } = await createServant(servant)
+        await handleFetchAllServants()
+        toast.success(message)
+      } catch (err) {
+        const error = err as Error
+        toast.error(error.message)
+      }
     })
   }
 
-  const handleEditServant = async (servant: Servant) => {
+  const handleEditServant = (servant: Servant) => {
     startTransition(async () => {
-      await updateServant(servant)
-      await handleFetchAllServants()
+      startTransition(async () => {
+        try {
+          const { message } = await updateServant(servant)
+          await handleFetchAllServants()
+          toast.success(message)
+        } catch (err) {
+          const error = err as Error
+          toast.error(error.message)
+        }
+      })
     })
   }
 

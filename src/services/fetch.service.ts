@@ -1,3 +1,4 @@
+import { env } from '@/env'
 import {
   DeleteProps,
   GetProps,
@@ -8,40 +9,59 @@ import {
 } from './repositories/http.repository'
 
 export class FetchService implements HttpRepository {
-  async get<T>({ url, headers, next, cache }: GetProps): Promise<T> {
-    const response = await fetch(url, { next, headers, cache }).then((res) =>
-      res.json(),
-    )
+  async get<T>({ url, next, cache }: GetProps): Promise<T> {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${env.API_TOKEN}`,
+      },
+      next,
+      cache,
+    }).then((res) => res.json())
     return response as T
   }
 
-  async post<T, D>({ url, data, headers, next }: PostProps<D>): Promise<T> {
+  async post<T, D>({ url, data }: PostProps<D>): Promise<T> {
     const response = await fetch(url, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${env.API_TOKEN}`,
+      },
       body: JSON.stringify(data),
-      headers,
-      next,
-    }).then((res) => res.json())
+    })
 
-    return response as T
+    const responseData = await response.json()
+
+    if (response.status !== 201) {
+      throw new Error(responseData.message)
+    }
+
+    return responseData as T
   }
 
   async put<T, D>({ url, data, headers, next }: PutProps<D>): Promise<T> {
     const response = await fetch(url, {
       method: 'PUT',
       body: JSON.stringify(data),
-      headers,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${env.API_TOKEN}`,
+      },
       next,
-    })
+    }).then((res) => res.json())
 
     return response as T
   }
 
-  async delete<T>({ url, headers }: DeleteProps): Promise<T> {
+  async delete<T>({ url }: DeleteProps): Promise<T> {
     const response = await fetch(url, {
       method: 'DELETE',
-      headers,
-    }).then((res) => res.json())
+      headers: {
+        Authorization: `Bearer ${env.API_TOKEN}`,
+      },
+    })
+
+    console.log(response)
 
     return response as T
   }
@@ -50,7 +70,10 @@ export class FetchService implements HttpRepository {
     const response = await fetch(url, {
       method: 'PATCH',
       body: JSON.stringify(data),
-      headers,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${env.API_TOKEN}`,
+      },
       next,
     }).then((res) => res.json())
 

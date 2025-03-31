@@ -17,8 +17,8 @@ import { Servant, ServantRequest } from '@/app/servants/servant.model'
 
 export type FormServantProps = {
   defaultServant?: Servant
-  createServant?: (servant: ServantRequest) => Promise<void>
-  editServant?: (servant: Servant) => Promise<void>
+  createServant?: (servant: ServantRequest) => void
+  editServant?: (servant: Servant) => void
 }
 
 export const FormServant = (props: FormServantProps) => {

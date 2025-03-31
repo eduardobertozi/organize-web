@@ -1,19 +1,28 @@
 'use server'
 
 import { Servant, ServantRequest } from '@/app/servants/servant.model'
-import { FetchService } from '@/services/fetch.service'
-import { revalidatePath } from 'next/cache'
-import { FetchServants } from './components/list-servants/list-servants.types'
 import { env } from '@/env'
+import { FetchService } from '@/services/fetch.service'
+import { revalidateTag } from 'next/cache'
+import { FetchServants } from './components/list-servants/list-servants.types'
 
 const http = new FetchService()
 const baseUrl = `${env.API_BASE_URL}/servants`
+
+export type ServantsAPIResponse = {
+  message?: string
+  servants?: Servant[]
+  servant?: Servant
+}
 
 export const fetchAllServants = async (page: number) => {
   const response = await http.get<FetchServants>({
     url: `${baseUrl}/all?page=${page}`,
     headers: {
       Authorization: `Bearer ${env.API_TOKEN}`,
+    },
+    next: {
+      tags: ['servants'],
     },
     cache: 'force-cache',
   })
@@ -34,21 +43,17 @@ export const fetchServantByName = async (name: string, page?: number) => {
 }
 
 export const createServant = async (servant: ServantRequest) => {
-  const response = await http.post<Servant, ServantRequest>({
+  const response = await http.post<ServantsAPIResponse, ServantRequest>({
     url: baseUrl,
     data: servant,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
   })
 
-  revalidatePath('/servants')
-
+  revalidateTag('servants')
   return response
 }
 
 export const updateServant = async ({ id, ...servant }: ServantRequest) => {
-  const response = await http.put<Servant, ServantRequest>({
+  const response = await http.put<ServantsAPIResponse, ServantRequest>({
     url: `${baseUrl}/${id}`,
     data: servant,
     headers: {
@@ -56,7 +61,7 @@ export const updateServant = async ({ id, ...servant }: ServantRequest) => {
     },
   })
 
-  revalidatePath('/servants')
+  revalidateTag('servants')
 
   return response
 }
@@ -69,7 +74,7 @@ export const deleteServant = async (servantId: string) => {
     },
   })
 
-  revalidatePath('/servants')
+  revalidateTag('servants')
 
   return response
 }
