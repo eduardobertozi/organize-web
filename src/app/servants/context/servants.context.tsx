@@ -4,10 +4,18 @@ import {
   createServant,
   deleteServant,
   fetchAllServants,
+  fetchServantByName,
   updateServant,
 } from '@/actions/servants.actions'
 import { Servant, ServantsRequest } from '@/types/servants.types'
-import { createContext, useContext, useState, useTransition } from 'react'
+import { debounce, DebouncedFunc } from 'lodash'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  useTransition,
+} from 'react'
 import { toast } from 'sonner'
 
 type ServantsContextProps = {
@@ -16,6 +24,7 @@ type ServantsContextProps = {
   hasMore: boolean
   total: number
   loading: boolean
+  fetchServantsByName: DebouncedFunc<(name: string) => Promise<void>>
   fetchServants: () => Promise<void>
   reloadServants: () => Promise<void>
   createNewServant: (servant: ServantsRequest) => Promise<void>
@@ -38,17 +47,32 @@ export const ServantsProvider = ({
   const [loading, startTransition] = useTransition()
   const [servants, setServants] = useState<Servant[]>([])
 
+  const fetchServantsByName = useCallback(
+    debounce(async (name: string) => {
+      startTransition(async () => {
+        const { servants, total, next } = await fetchServantByName(name, 1)
+        const hasMoreServants = !!next
+
+        console.log(servants, 'SERVANTS NAME')
+
+        setServants(servants)
+        setPage(1)
+        setTotal(total)
+        setHasMore(hasMoreServants)
+      })
+    }, 300),
+    [],
+  )
+
   const fetchServants = async () => {
     startTransition(async () => {
-      const { servants, total, next, previous } = await fetchAllServants(page)
+      const { servants, total, next } = await fetchAllServants(page)
       const hasMoreServants = !!next
 
       setServants((prev) => [...prev, ...servants])
       setPage((prev) => prev + 1)
       setTotal(total)
       setHasMore(hasMoreServants)
-
-      console.log({ servants, total, next, previous, page })
     })
   }
 
@@ -108,6 +132,7 @@ export const ServantsProvider = ({
         hasMore,
         total,
         loading,
+        fetchServantsByName,
         fetchServants,
         reloadServants,
         createNewServant,

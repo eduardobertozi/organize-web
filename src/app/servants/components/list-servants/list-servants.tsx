@@ -6,6 +6,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useServantsContext } from '../../context/servants.context'
 import { CreateServant } from './create-servant'
 import { ListItem } from './list-item'
+import { FindServant } from './find-servant'
 
 export const ListServants = () => {
   const { servants, loading, hasMore, total, fetchServants } =
@@ -13,7 +14,10 @@ export const ListServants = () => {
 
   return (
     <div className="space-y-4">
-      <CreateServant />
+      <div className="flex flex-col gap-2 md:flex-row md:items-end">
+        <FindServant className="flex-1" />
+        <CreateServant />
+      </div>
 
       <ScrollArea className="h-[300px]">
         {servants.map((servant) => (

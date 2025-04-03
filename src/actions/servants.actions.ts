@@ -28,10 +28,8 @@ export const fetchAllServants = async (page: number) => {
 }
 
 export const fetchServantByName = async (name: string, page?: number) => {
-  console.log(name)
-
   const response = await http.get<ServantsResponse>({
-    url: `${baseUrl}/servants/all?name=${name}&page=${page ?? 1}`,
+    url: `${baseUrl}/servants/all?q=${name}&page=${page ?? 1}`,
     cache: 'force-cache',
     headers: {
       Authorization: `Bearer ${env.API_TOKEN}`,
@@ -66,7 +64,7 @@ export const updateServant = async ({ id, ...servant }: ServantsRequest) => {
 }
 
 export const deleteServant = async (servantId: string) => {
-  const response = await http.delete<void>({
+  await http.delete<void>({
     url: `${baseUrl}/servants/${servantId}`,
     headers: {
       Authorization: `Bearer ${env.API_TOKEN}`,
@@ -74,6 +72,4 @@ export const deleteServant = async (servantId: string) => {
   })
 
   revalidateTag('servants')
-
-  return response
 }

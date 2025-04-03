@@ -62,8 +62,6 @@ export class FetchService implements HttpRepository {
       },
     })
 
-    console.log(response)
-
     return response as T
   }
 

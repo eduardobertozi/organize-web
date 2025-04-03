@@ -45,8 +45,6 @@ export const createProduct = async (product: ProductRequest) => {
     },
   })
 
-  console.log(response, 'RESPONSE')
-
   revalidatePath('/products')
 
   return response

@@ -15,7 +15,7 @@ export const CreateServant = () => {
     <Sheet>
       <SheetTrigger asChild>
         <Button variant="outline">
-          <PlusIcon size={24} /> Novo Serviço
+          <PlusIcon size={24} /> Novo
         </Button>
       </SheetTrigger>
       <SheetContent side="bottom" className="p-4">
