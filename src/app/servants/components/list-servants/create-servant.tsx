@@ -14,11 +14,11 @@ export const CreateServant = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">
+        <Button>
           <PlusIcon size={24} /> Novo
         </Button>
       </SheetTrigger>
-      <SheetContent side="bottom" className="p-4">
+      <SheetContent side="left" className="w-full p-4">
         <SheetHeader>
           <SheetTitle>Serviço</SheetTitle>
           <SheetDescription>

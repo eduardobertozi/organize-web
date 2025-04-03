@@ -87,7 +87,7 @@ export const FormServant = ({ currentServant }: FormServantProps) => {
             )}
           />
         </ScrollArea>
-        <Button className="w-full">Salvar</Button>
+        <Button className="bg-primary w-full">Salvar</Button>
       </form>
     </Form>
   )
