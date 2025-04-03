@@ -14,7 +14,7 @@ const baseUrl = env.API_BASE_URL
 
 export const fetchAllServants = async (page: number) => {
   const response = await http.get<ServantsResponse>({
-    url: `${baseUrl}/servants/all?page=${page}`,
+    url: `${baseUrl}/servants/all?page=${page ?? 1}`,
     headers: {
       Authorization: `Bearer ${env.API_TOKEN}`,
     },
@@ -59,8 +59,6 @@ export const updateServant = async ({ id, ...servant }: ServantsRequest) => {
       Authorization: `Bearer ${env.API_TOKEN}`,
     },
   })
-
-  console.log(response)
 
   revalidateTag('servants')
 

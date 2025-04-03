@@ -1,15 +1,19 @@
-import { fetchAllProducts } from '@/app/products/products.actions'
 import { Option } from '@/components/ui/expansions/multiple-selector'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useServant } from '../../hooks/use-servant'
 import { FormServantProps } from './form-servant'
 import { FormServantInput, FormServantSchema } from './form-servant.schema'
+import { useServantsContext } from '../../context/servants.context'
+import { fetchAllProducts } from '@/actions/products.actions'
+import { useRouter } from 'next/navigation'
 
 export type UseFormServantProps = FormServantProps
 
 export const useFormServant = ({ currentServant }: UseFormServantProps) => {
+  const router = useRouter()
+  const { reloadServants, createNewServant, updateOneServant } =
+    useServantsContext()
   const [productsOptions, setProductsOptions] = useState<Option[]>([])
   const [selectedProductsOptions, setSelectedProductsOptions] = useState<
     Option[]
@@ -67,22 +71,22 @@ export const useFormServant = ({ currentServant }: UseFormServantProps) => {
   const onSubmit = async (servant: FormServantInput) => {
     const price = calculateTotalPrice(servant)
 
-    const { createNewServant, updateOneServant } = useServant({
+    const payload = {
       ...servant,
-      id: currentServant?.id,
+      id: servant.id!,
       price,
       productsPrice: totalProductsPrice,
       products: servant.products.map((product) => product.value),
-    })
-
-    if (currentServant) {
-      await updateOneServant()
-    } else {
-      await createNewServant()
     }
 
-    setSelectedProductsOptions([])
-    // window.location.reload()
+    if (currentServant) {
+      await updateOneServant(payload)
+    } else {
+      await createNewServant(payload)
+    }
+
+    await reloadServants()
+    router.refresh()
   }
 
   useEffect(() => {

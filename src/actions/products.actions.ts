@@ -1,15 +1,19 @@
 'use server'
 
-import { FetchService } from '@/services/fetch.service'
-import { revalidatePath } from 'next/cache'
 import { env } from '@/env'
-import { FetchProducts, Product, ProductRequest } from './products.types'
+import { FetchService } from '@/services/fetch.service'
+import {
+  Product,
+  ProductRequest,
+  ProductResponse,
+} from '@/types/products.types'
+import { revalidatePath } from 'next/cache'
 
 const http = new FetchService()
 const baseUrl = `${env.API_BASE_URL}/products`
 
 export const fetchAllProducts = async (page?: number) => {
-  const response = await http.get<FetchProducts>({
+  const response = await http.get<ProductResponse>({
     url: `${baseUrl}/all?page=${page ?? 1}`,
     headers: {
       Authorization: `Bearer ${env.API_TOKEN}`,
@@ -21,7 +25,7 @@ export const fetchAllProducts = async (page?: number) => {
 }
 
 export const fetchProductByName = async (name: string, page?: number) => {
-  const response = await http.get<FetchProducts>({
+  const response = await http.get<ProductResponse>({
     url: `${baseUrl}?name=${name}&page=${page ?? 1}`,
     cache: 'force-cache',
     headers: {

@@ -17,6 +17,7 @@ export class FetchService implements HttpRepository {
       next,
       cache,
     }).then((res) => res.json())
+
     return response as T
   }
 

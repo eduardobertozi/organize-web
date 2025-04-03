@@ -1,4 +1,4 @@
-import { ServantsProvider } from './servants.context'
+import { ServantsProvider } from './context/servants.context'
 
 export default function ServantsLayout({
   children,

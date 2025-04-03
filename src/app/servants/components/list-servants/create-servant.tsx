@@ -1,5 +1,4 @@
-'use client'
-
+import { Button } from '@/components/ui/button'
 import {
   Sheet,
   SheetContent,
@@ -8,26 +7,25 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { PlusIcon } from 'lucide-react'
+import { FormServant } from '../form-servant/form-servant'
 
-type ModalItemProps = {
-  trigger: React.JSX.Element
-  formItem: React.JSX.Element
-}
-
-export const ModalItem: React.FC<ModalItemProps> = ({ trigger, formItem }) => {
+export const CreateServant = () => {
   return (
     <Sheet>
-      <SheetTrigger asChild>{trigger}</SheetTrigger>
+      <SheetTrigger asChild>
+        <Button variant="outline">
+          <PlusIcon size={24} /> Novo Serviço
+        </Button>
+      </SheetTrigger>
       <SheetContent side="bottom" className="p-4">
         <SheetHeader>
           <SheetTitle>Serviço</SheetTitle>
-
           <SheetDescription>
             Adicione, edite ou exclua um serviço.
           </SheetDescription>
         </SheetHeader>
-
-        {formItem}
+        <FormServant />
       </SheetContent>
     </Sheet>
   )

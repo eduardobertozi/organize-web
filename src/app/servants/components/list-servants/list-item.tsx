@@ -12,16 +12,15 @@ import { FormServant } from '../form-servant/form-servant'
 import { CalendarIcon, TrashIcon } from 'lucide-react'
 import { Servant } from '@/types/servants.types'
 import { Button } from '@/components/ui/button'
+import { useServantsContext } from '../../context/servants.context'
 
 type ListItemProps = {
   servant: Servant
-  deleteServant: (servantId: string) => void
 }
 
-export const ListItem: React.FC<ListItemProps> = ({
-  servant,
-  deleteServant,
-}) => {
+export const ListItem: React.FC<ListItemProps> = ({ servant }) => {
+  const { deleteOneServant } = useServantsContext()
+
   return (
     <div
       data-testid="list-item"
@@ -47,7 +46,7 @@ export const ListItem: React.FC<ListItemProps> = ({
         type="button"
         variant="outline"
         className="text-destructive/60"
-        onClick={() => deleteServant(servant.id)}
+        onClick={() => deleteOneServant(servant.id)}
       >
         <TrashIcon size={16} />
       </Button>
@@ -68,7 +67,7 @@ const ListItemLine = ({ servant }: { servant: Servant }) => {
         </p>
       </div>
 
-      <div className="flex gap-1 text-xs text-zinc-600">
+      <div className="flex gap-1 text-xs whitespace-nowrap text-zinc-600">
         <CalendarIcon size={16} />
         <p>{dayjs(servant.createdAt).format('DD/MM/YYYY HH:mm')}</p>
       </div>
