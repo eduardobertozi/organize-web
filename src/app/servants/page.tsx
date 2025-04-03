@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button'
+import { CloseButton } from '@/components/global/close-button'
 import {
   Card,
   CardContent,
@@ -6,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { XIcon } from 'lucide-react'
 import { ListServants } from './components/list-servants/list-servants'
 
 export const ServantsPage = async () => {
@@ -17,9 +16,7 @@ export const ServantsPage = async () => {
           <div className="flex items-center justify-between">
             <CardTitle className="text-xl font-bold">Serviços</CardTitle>
 
-            <Button variant="outline" className="border-zinc-700 text-zinc-300">
-              Fechar <XIcon size={24} />
-            </Button>
+            <CloseButton />
           </div>
 
           <CardDescription className="text-xs">
