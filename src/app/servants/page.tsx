@@ -11,7 +11,7 @@ import { ListServants } from './components/list-servants/list-servants'
 
 export const ServantsPage = async () => {
   return (
-    <div className="grid h-screen w-full place-items-center p-6">
+    <div className="flex h-screen w-full items-center justify-center px-6">
       <Card className="container">
         <CardHeader className="gap-4 border-b pb-4">
           <div className="flex items-center justify-between">

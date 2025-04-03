@@ -1,11 +1,11 @@
 'use client'
 
-import { createContext, useContext, useMemo, useState } from 'react'
-import { FetchServants } from './components/list-servants/list-servants.types'
+import { ServantsResponse } from '@/types/servants.types'
+import { createContext, useContext, useState } from 'react'
 
 type ServantsContextProps = {
-  servantsResponse: FetchServants | null
-  changeServantsResponse: (data: FetchServants | null) => void
+  servantsResponse: ServantsResponse | null
+  changeServantsResponse: (data: ServantsResponse | null) => void
 }
 
 const ServantsContext = createContext<ServantsContextProps>(
@@ -18,9 +18,9 @@ export const ServantsProvider = ({
   children: React.ReactNode
 }) => {
   const [servantsResponse, setServantsResponse] =
-    useState<FetchServants | null>(null)
+    useState<ServantsResponse | null>(null)
 
-  const changeServantsResponse = (data: FetchServants | null) => {
+  const changeServantsResponse = (data: ServantsResponse | null) => {
     setServantsResponse(data)
   }
 

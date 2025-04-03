@@ -28,3 +28,5 @@ export const FormServantSchema = z.object({
       message: 'O custo da mão de obra deve ser maior que 0.',
     }),
 })
+
+export type FormServantInput = z.infer<typeof FormServantSchema>

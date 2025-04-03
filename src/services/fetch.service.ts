@@ -39,7 +39,7 @@ export class FetchService implements HttpRepository {
     return responseData as T
   }
 
-  async put<T, D>({ url, data, headers, next }: PutProps<D>): Promise<T> {
+  async put<T, D>({ url, data, next }: PutProps<D>): Promise<T> {
     const response = await fetch(url, {
       method: 'PUT',
       body: JSON.stringify(data),
@@ -66,7 +66,7 @@ export class FetchService implements HttpRepository {
     return response as T
   }
 
-  async patch<T, D>({ url, data, headers, next }: PatchProps<D>): Promise<T> {
+  async patch<T, D>({ url, data, next }: PatchProps<D>): Promise<T> {
     const response = await fetch(url, {
       method: 'PATCH',
       body: JSON.stringify(data),

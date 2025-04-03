@@ -9,7 +9,7 @@ export const DeleteButton: React.FC<DeleteButtonProps> = ({
   ...props
 }) => {
   return (
-    <Button {...props} className={cn(className)}>
+    <Button type="button" {...props} className={cn(className)}>
       <TrashIcon size={16} />
     </Button>
   )

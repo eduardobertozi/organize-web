@@ -10,19 +10,16 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import { useFormServant } from './use-form-servant'
-import { Servant, ServantRequest } from '@/app/servants/servant.model'
+import { Servant } from '@/types/servants.types'
 
 export type FormServantProps = {
-  defaultServant?: Servant
-  createServant?: (servant: ServantRequest) => void
-  editServant?: (servant: Servant) => void
+  currentServant?: Servant
 }
 
-export const FormServant = (props: FormServantProps) => {
-  const vm = useFormServant(props)
+export const FormServant = ({ currentServant }: FormServantProps) => {
+  const vm = useFormServant({ currentServant })
 
   return (
     <Form {...vm.form}>
@@ -53,8 +50,8 @@ export const FormServant = (props: FormServantProps) => {
                 <FormControl>
                   <MultipleSelector
                     {...field}
-                    value={vm.selectedProducts}
-                    options={vm.products}
+                    value={vm.selectedProductsOptions}
+                    options={vm.productsOptions}
                     placeholder="Selecione um ou mais produtos."
                     emptyIndicator="Nenhum produto encontrado."
                   />

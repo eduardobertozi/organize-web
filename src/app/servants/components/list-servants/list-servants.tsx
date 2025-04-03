@@ -2,12 +2,6 @@
 
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Skeleton } from '@/components/ui/skeleton'
-import { FindServant } from '../acessories/find-servant'
-import { FormServant } from '../form-servant/form-servant'
-import { ListItem } from '../acessories/list-item'
-import { useListServants } from './use-list-servants'
-import { PlusIcon } from 'lucide-react'
 import {
   Sheet,
   SheetContent,
@@ -16,14 +10,35 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { PlusIcon } from 'lucide-react'
+import { ListItem } from '../acessories/list-item'
+import { useState, useTransition } from 'react'
+import { Servant } from '@/types/servants.types'
+import { fetchAllServants } from '@/actions/servants.actions'
+import { InfiniteScroll } from '@/components/ui/expansions/infinite-scroll'
+import { Skeleton } from '@/components/ui/skeleton'
+import { FormServant } from '../form-servant/form-servant'
 
 export const ListServants = () => {
-  const vm = useListServants()
+  const [page, setPage] = useState(1)
+  const [servants, setServants] = useState<Servant[]>([])
+  const [hasMore, setHasMore] = useState(true)
+  const [total, setTotal] = useState(0)
+  const [loading, startTransition] = useTransition()
+
+  const next = () => {
+    startTransition(async () => {
+      const response = await fetchAllServants(page)
+
+      setServants((prev) => [...prev, ...response.servants])
+      setPage((prev) => prev + 1)
+      setTotal(response.total)
+      setHasMore(response.total > servants.length)
+    })
+  }
 
   return (
     <div className="space-y-4">
-      <FindServant handleSearch={vm.handleFetchServantByName} />
-
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" className="w-full sm:w-auto">
@@ -37,39 +52,32 @@ export const ListServants = () => {
               Adicione, edite ou exclua um serviço.
             </SheetDescription>
           </SheetHeader>
-
-          <FormServant createServant={vm.handleCreateServant} />
+          <FormServant />
         </SheetContent>
       </Sheet>
 
-      <ScrollArea className="h-[300px]">
-        {vm.isPending && <Skeleton className="mt-4 h-10 w-full" />}
+      <ScrollArea className="max-h-[300px]">
+        {servants.map((servant) => (
+          <ListItem
+            servant={servant}
+            key={servant.id}
+            deleteServant={() =>
+              console.log(`Deletando serviço ${servant.name}`)
+            }
+          />
+        ))}
 
-        {vm.servantsResponse &&
-          !vm.isPending &&
-          vm.servantsResponse?.servants?.map((servant) => (
-            <ListItem
-              servant={servant}
-              key={servant.id}
-              handleDelete={vm.handleDeleteServant}
-              handleEdit={vm.handleEditServant}
-            />
-          ))}
-
-        {vm.servantsResponse?.next && (
-          <Button
-            onClick={() => vm.handleFetchAllServants(vm.servantsResponse?.next)}
-            variant="outline"
-            className="z-20 my-10 w-full"
-          >
-            Ver mais
-          </Button>
-        )}
+        <InfiniteScroll
+          hasMore={hasMore}
+          isLoading={loading}
+          next={next}
+          threshold={1}
+        >
+          {hasMore && <Skeleton className="h-12 w-full" />}
+        </InfiniteScroll>
       </ScrollArea>
-
       <p className="text-xs text-zinc-300">
-        Exibindo {vm.servantsResponse?.servants?.length} de{' '}
-        {vm.servantsResponse?.total} serviços
+        Exibindo {servants.length} de {total} serviços
       </p>
     </div>
   )

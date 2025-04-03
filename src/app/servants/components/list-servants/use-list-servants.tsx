@@ -1,6 +1,6 @@
 import { debounce } from 'lodash'
-import { useCallback, useEffect, useState, useTransition } from 'react'
-import { FetchServants } from './list-servants.types'
+import { useCallback, useEffect, useTransition } from 'react'
+import { toast } from 'sonner'
 import { Servant, ServantRequest } from '../../servant.model'
 import {
   createServant,
@@ -10,7 +10,6 @@ import {
   updateServant,
 } from '../../servants.actions'
 import { useServantsContext } from '../../servants.context'
-import { toast } from 'sonner'
 
 export const useListServants = () => {
   const { servantsResponse, changeServantsResponse } = useServantsContext()
@@ -19,7 +18,6 @@ export const useListServants = () => {
   const handleFetchAllServants = async (page?: number | null) => {
     startTransition(async () => {
       const data = await fetchAllServants(page ?? 1)
-      console.log(data)
       changeServantsResponse(data)
     })
   }

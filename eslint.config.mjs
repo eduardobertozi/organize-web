@@ -14,10 +14,4 @@ export default [
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   eslintPluginPrettierRecommended,
-  {
-    rules: {
-      'no-console': 'error',
-      'no-explicity-any': 'warn',
-    },
-  },
 ]

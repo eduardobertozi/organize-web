@@ -1,23 +1,20 @@
 'use server'
 
-import { Servant, ServantRequest } from '@/app/servants/servant.model'
 import { env } from '@/env'
 import { FetchService } from '@/services/fetch.service'
+import {
+  ServantsInputResponse,
+  ServantsRequest,
+  ServantsResponse,
+} from '@/types/servants.types'
 import { revalidateTag } from 'next/cache'
-import { FetchServants } from './components/list-servants/list-servants.types'
 
 const http = new FetchService()
-const baseUrl = `${env.API_BASE_URL}/servants`
-
-export type ServantsAPIResponse = {
-  message?: string
-  servants?: Servant[]
-  servant?: Servant
-}
+const baseUrl = env.API_BASE_URL
 
 export const fetchAllServants = async (page: number) => {
-  const response = await http.get<FetchServants>({
-    url: `${baseUrl}/all?page=${page}`,
+  const response = await http.get<ServantsResponse>({
+    url: `${baseUrl}/servants/all?page=${page}`,
     headers: {
       Authorization: `Bearer ${env.API_TOKEN}`,
     },
@@ -31,8 +28,10 @@ export const fetchAllServants = async (page: number) => {
 }
 
 export const fetchServantByName = async (name: string, page?: number) => {
-  const response = await http.get<FetchServants>({
-    url: `${baseUrl}?name=${name}&page=${page ?? 1}`,
+  console.log(name)
+
+  const response = await http.get<ServantsResponse>({
+    url: `${baseUrl}/servants/all?name=${name}&page=${page ?? 1}`,
     cache: 'force-cache',
     headers: {
       Authorization: `Bearer ${env.API_TOKEN}`,
@@ -42,9 +41,9 @@ export const fetchServantByName = async (name: string, page?: number) => {
   return response
 }
 
-export const createServant = async (servant: ServantRequest) => {
-  const response = await http.post<ServantsAPIResponse, ServantRequest>({
-    url: baseUrl,
+export const createServant = async (servant: ServantsRequest) => {
+  const response = await http.post<ServantsInputResponse, ServantsRequest>({
+    url: `${baseUrl}/servants`,
     data: servant,
   })
 
@@ -52,14 +51,16 @@ export const createServant = async (servant: ServantRequest) => {
   return response
 }
 
-export const updateServant = async ({ id, ...servant }: ServantRequest) => {
-  const response = await http.put<ServantsAPIResponse, ServantRequest>({
-    url: `${baseUrl}/${id}`,
+export const updateServant = async ({ id, ...servant }: ServantsRequest) => {
+  const response = await http.put<ServantsInputResponse, ServantsRequest>({
+    url: `${baseUrl}/servants/${id}`,
     data: servant,
     headers: {
       Authorization: `Bearer ${env.API_TOKEN}`,
     },
   })
+
+  console.log(response)
 
   revalidateTag('servants')
 
@@ -68,7 +69,7 @@ export const updateServant = async ({ id, ...servant }: ServantRequest) => {
 
 export const deleteServant = async (servantId: string) => {
   const response = await http.delete<void>({
-    url: `${baseUrl}/${servantId}`,
+    url: `${baseUrl}/servants/${servantId}`,
     headers: {
       Authorization: `Bearer ${env.API_TOKEN}`,
     },

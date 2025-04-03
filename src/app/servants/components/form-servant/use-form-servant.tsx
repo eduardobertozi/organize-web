@@ -1,29 +1,29 @@
 import { fetchAllProducts } from '@/app/products/products.actions'
 import { Option } from '@/components/ui/expansions/multiple-selector'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useServant } from '../../hooks/use-servant'
 import { FormServantProps } from './form-servant'
-import { FormServantSchema } from './form-servant.schema'
-import { FormServant } from './form-servant.types'
+import { FormServantInput, FormServantSchema } from './form-servant.schema'
 
 export type UseFormServantProps = FormServantProps
 
-export const useFormServant = (props: UseFormServantProps) => {
-  const router = useRouter()
-  const [products, setProducts] = useState<Option[]>([])
-  const [selectedProducts, setSelectedProducts] = useState<Option[]>([])
+export const useFormServant = ({ currentServant }: UseFormServantProps) => {
+  const [productsOptions, setProductsOptions] = useState<Option[]>([])
+  const [selectedProductsOptions, setSelectedProductsOptions] = useState<
+    Option[]
+  >([])
   const [totalProductsPrice, setTotalProductsPrice] = useState(0)
 
-  const form = useForm<FormServant>({
+  const form = useForm<FormServantInput>({
     resolver: zodResolver(FormServantSchema),
     defaultValues: {
-      id: props.defaultServant?.id ?? null,
-      name: props.defaultServant?.name ?? '',
+      id: currentServant?.id ?? null,
+      name: currentServant?.name ?? '',
       products: [],
-      profitPercent: props.defaultServant?.profitPercent ?? 0,
-      workForcePrice: props.defaultServant?.workForcePrice ?? 0,
+      profitPercent: currentServant?.profitPercent ?? 0,
+      workForcePrice: currentServant?.workForcePrice ?? 0,
     },
   })
 
@@ -42,44 +42,47 @@ export const useFormServant = (props: UseFormServantProps) => {
       ),
     )
 
-    setProducts(productsToOptions)
+    setProductsOptions(productsToOptions)
 
-    if (props.defaultServant?.products) {
-      setSelectedProducts(
-        props.defaultServant.products.map((product) => ({
-          label: product.name,
-          value: product.id,
-        })),
+    if (currentServant) {
+      const selectedProducts = productsToOptions.filter((product) =>
+        currentServant?.products.includes(product.value),
       )
+
+      form.setValue('products', selectedProducts)
+      setSelectedProductsOptions(selectedProducts)
     }
   }
 
-  const onSubmit = async ({ products, id, ...data }: FormServant) => {
-    const servantPrice = totalProductsPrice + data.workForcePrice
-    const profit = (servantPrice * data.profitPercent) / 100
-    const totalPrice = servantPrice + profit
+  const calculateTotalPrice = ({
+    workForcePrice,
+    profitPercent,
+  }: FormServantInput) => {
+    const servantPrice = totalProductsPrice + workForcePrice
+    const profit = (servantPrice * profitPercent) / 100
 
-    if (props.createServant) {
-      props.createServant({
-        ...data,
-        price: totalPrice,
-        productsPrice: totalProductsPrice,
-      })
+    return servantPrice + profit
+  }
+
+  const onSubmit = async (servant: FormServantInput) => {
+    const price = calculateTotalPrice(servant)
+
+    const { createNewServant, updateOneServant } = useServant({
+      ...servant,
+      id: currentServant?.id,
+      price,
+      productsPrice: totalProductsPrice,
+      products: servant.products.map((product) => product.value),
+    })
+
+    if (currentServant) {
+      await updateOneServant()
+    } else {
+      await createNewServant()
     }
 
-    if (props.editServant) {
-      props.editServant({
-        ...data,
-        id: props.defaultServant!.id,
-        price: totalPrice,
-        productsPrice: totalProductsPrice,
-      })
-    }
-
-    form.reset()
-    setSelectedProducts([])
-
-    router.refresh()
+    setSelectedProductsOptions([])
+    // window.location.reload()
   }
 
   useEffect(() => {
@@ -87,8 +90,8 @@ export const useFormServant = (props: UseFormServantProps) => {
   }, [])
 
   return {
-    products,
-    selectedProducts,
+    productsOptions,
+    selectedProductsOptions,
     form,
     onSubmit,
   }
