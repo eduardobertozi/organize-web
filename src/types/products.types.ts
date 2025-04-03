@@ -10,11 +10,20 @@ export type Product = {
   updatedAt?: Date | null
 }
 
-export type ProductRequest = Optional<Product, 'id' | 'createdAt' | 'updatedAt'>
+export type ProductsRequest = Optional<
+  Product,
+  'id' | 'createdAt' | 'updatedAt'
+>
 
-export type ProductResponse = {
+export type ProductsResponse = {
   total: number
   next: number | null
   previous: number | null
   products: Product[]
+}
+
+export type ProductsInputResponse = {
+  message?: string
+  servants?: Product[]
+  servant?: Product
 }
