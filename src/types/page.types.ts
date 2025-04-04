@@ -1,6 +1,6 @@
 export type PageProps<
-  TParams extends Record<string, any>,
-  TSearchParams extends Record<string, any>,
+  TParams extends Record<string, unknown>,
+  TSearchParams extends Record<string, unknown>,
 > = {
   params: {
     [K in keyof TParams]: Promise<TParams[K]>
