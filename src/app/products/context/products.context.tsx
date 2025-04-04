@@ -7,7 +7,7 @@ import {
   fetchProductByName,
   updateProduct,
 } from '@/actions/products.actions'
-import { Product, ProductsRequest } from '@/types/products.types'
+import { Product, ProductsRequest } from '@/@types/products.types'
 import { debounce, DebouncedFunc } from 'lodash'
 import {
   createContext,

@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/sheet'
 import { FormServant } from '../form-servant/form-servant'
 import { CalendarIcon, TrashIcon } from 'lucide-react'
-import { Servant } from '@/types/servants.types'
+import { Servant } from '@/@types/servants.types'
 import { Button } from '@/components/ui/button'
 import { useServantsContext } from '../../context/servants.context'
 

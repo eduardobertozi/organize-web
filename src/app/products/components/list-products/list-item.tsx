@@ -8,7 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { Product } from '@/types/products.types'
+import { Product } from '@/@types/products.types'
 import { TrashIcon } from 'lucide-react'
 import { useProductsContext } from '../../context/products.context'
 import { FormProduct } from '../form-product/form-product'

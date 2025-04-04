@@ -5,6 +5,9 @@ import { FormProductProps } from './form-product'
 import { FormProductInput, FormProductSchema } from './form-product.schema'
 import { useProductsContext } from '../../context/products.context'
 import { uploadAndCreateAttachments } from '@/actions/attachments.actions'
+import { fetchAllSuppliers } from '@/actions/suppliers.actions'
+import { useEffect, useState } from 'react'
+import { Option } from '@/components/ui/expansions/multiple-selector'
 
 export type UseFormProductProps = FormProductProps
 
@@ -12,6 +15,7 @@ export const useFormProduct = ({ currentProduct }: UseFormProductProps) => {
   const router = useRouter()
   const { reloadProducts, createNewProduct, updateOneProduct } =
     useProductsContext()
+  const [suppliersOptions, setSuppliersOptions] = useState<Option[]>([])
 
   const form = useForm<FormProductInput>({
     resolver: zodResolver(FormProductSchema),
@@ -21,8 +25,26 @@ export const useFormProduct = ({ currentProduct }: UseFormProductProps) => {
       reference: currentProduct?.reference ?? '',
       price: currentProduct?.price ?? 0,
       stock: currentProduct?.stock ?? 1,
+      supplierId: currentProduct?.supplierId ?? '',
     },
   })
+
+  const fetchSuppliers = async () => {
+    const response = await fetchAllSuppliers()
+
+    const suppliersToOptions = response.suppliers.map((supplier) => ({
+      label: supplier.name,
+      value: supplier.id,
+    }))
+
+    setSuppliersOptions(suppliersToOptions)
+
+    console.log(currentProduct)
+
+    if (currentProduct) {
+      form.setValue('supplierId', currentProduct.supplierId!)
+    }
+  }
 
   const onSubmit = async (product: FormProductInput) => {
     const attachmentsIds = await uploadAndCreateAttachments(
@@ -46,12 +68,14 @@ export const useFormProduct = ({ currentProduct }: UseFormProductProps) => {
     router.refresh()
   }
 
-  // useEffect(() => {
-  //   void fetchProducts()
-  // }, [])
+  useEffect(() => {
+    void fetchSuppliers()
+  }, [])
 
   return {
     form,
+    suppliersOptions,
+    fetchSuppliers,
     onSubmit,
   }
 }

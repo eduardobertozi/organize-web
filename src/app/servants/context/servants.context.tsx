@@ -7,7 +7,7 @@ import {
   fetchServantByName,
   updateServant,
 } from '@/actions/servants.actions'
-import { Servant, ServantsRequest } from '@/types/servants.types'
+import { Servant, ServantsRequest } from '@/@types/servants.types'
 import { debounce, DebouncedFunc } from 'lodash'
 import {
   createContext,

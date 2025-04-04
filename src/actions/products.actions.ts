@@ -6,7 +6,7 @@ import {
   ProductsInputResponse,
   ProductsRequest,
   ProductsResponse,
-} from '@/types/products.types'
+} from '@/@types/products.types'
 import { revalidatePath } from 'next/cache'
 
 const http = new FetchService()

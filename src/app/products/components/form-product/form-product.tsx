@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useFormProduct } from './use-form-product'
-import { Product } from '@/types/products.types'
+import { Product } from '@/@types/products.types'
 import {
   Select,
   SelectContent,
@@ -103,9 +103,11 @@ export const FormProduct = ({ currentProduct }: FormProductProps) => {
                     <SelectValue placeholder="Selecionar" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="cab5b590-e058-4af6-98a5-bb94a15df339">
-                      Denis Haus Bergh
-                    </SelectItem>
+                    {vm.suppliersOptions.map((supplier) => (
+                      <SelectItem key={supplier.value} value={supplier.value}>
+                        {supplier.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </FormControl>

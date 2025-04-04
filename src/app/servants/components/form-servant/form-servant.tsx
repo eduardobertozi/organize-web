@@ -12,7 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { ScrollArea } from '@radix-ui/react-scroll-area'
 import { useFormServant } from './use-form-servant'
-import { Servant } from '@/types/servants.types'
+import { Servant } from '@/@types/servants.types'
 
 export type FormServantProps = {
   currentServant?: Servant

@@ -6,7 +6,7 @@ import {
   ServantsInputResponse,
   ServantsRequest,
   ServantsResponse,
-} from '@/types/servants.types'
+} from '@/@types/servants.types'
 import { revalidateTag } from 'next/cache'
 
 const http = new FetchService()
