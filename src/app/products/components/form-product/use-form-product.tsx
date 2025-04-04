@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 import { FormProductProps } from './form-product'
 import { FormProductInput, FormProductSchema } from './form-product.schema'
 import { useProductsContext } from '../../context/products.context'
-import { uploadProductAttachment } from '@/actions/attachments.actions'
+import { uploadAndCreateAttachments } from '@/actions/attachments.actions'
 
 export type UseFormProductProps = FormProductProps
 
@@ -24,22 +24,10 @@ export const useFormProduct = ({ currentProduct }: UseFormProductProps) => {
     },
   })
 
-  const uploadFiles = async (files: FileList): Promise<string[]> => {
-    const attachmentIds: string[] = []
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
-      const { attachmentId } = await uploadProductAttachment(file)
-      attachmentIds.push(attachmentId)
-    }
-
-    return attachmentIds
-  }
-
   const onSubmit = async (product: FormProductInput) => {
-    const attachmentsIds = await uploadFiles(product.attachments!)
-
-    console.log(attachmentsIds)
+    const attachmentsIds = await uploadAndCreateAttachments(
+      product.attachments!,
+    )
 
     const payload = {
       ...product,
