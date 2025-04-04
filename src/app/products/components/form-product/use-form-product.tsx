@@ -1,12 +1,10 @@
-import { Option } from '@/components/ui/expansions/multiple-selector'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { FormProductProps } from './form-product'
 import { FormProductInput, FormProductSchema } from './form-product.schema'
+import { uploadProductAttachment } from '@/actions/products.actions'
 import { useProductsContext } from '../../context/products.context'
-import { fetchAllProducts } from '@/actions/products.actions'
-import { useRouter } from 'next/navigation'
 
 export type UseFormProductProps = FormProductProps
 
@@ -14,69 +12,37 @@ export const useFormProduct = ({ currentProduct }: UseFormProductProps) => {
   const router = useRouter()
   const { reloadProducts, createNewProduct, updateOneProduct } =
     useProductsContext()
-  const [productsOptions, setProductsOptions] = useState<Option[]>([])
-  const [selectedProductsOptions, setSelectedProductsOptions] = useState<
-    Option[]
-  >([])
-  const [totalProductsPrice, setTotalProductsPrice] = useState(0)
 
   const form = useForm<FormProductInput>({
     resolver: zodResolver(FormProductSchema),
     defaultValues: {
       id: currentProduct?.id ?? null,
       name: currentProduct?.name ?? '',
-      products: [],
-      profitPercent: currentProduct?.profitPercent ?? 0,
-      workForcePrice: currentProduct?.workForcePrice ?? 0,
+      reference: currentProduct?.reference ?? '',
+      price: currentProduct?.price ?? 0,
+      stock: currentProduct?.stock ?? 1,
     },
   })
 
-  const fetchProducts = async () => {
-    const response = await fetchAllProducts()
+  const uploadFiles = async (files: FileList): Promise<string[]> => {
+    const attachmentIds: string[] = []
 
-    const productsToOptions = response.products.map((product) => ({
-      label: product.name,
-      value: product.id,
-    }))
-
-    setTotalProductsPrice(
-      response.products.reduce(
-        (acc: number, product) => acc + product.price,
-        0,
-      ),
-    )
-
-    setProductsOptions(productsToOptions)
-
-    if (currentProduct) {
-      const selectedProducts = productsToOptions.filter((product) =>
-        currentProduct?.products.includes(product.value),
-      )
-
-      form.setValue('products', selectedProducts)
-      setSelectedProductsOptions(selectedProducts)
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      const { attachmentId } = await uploadProductAttachment(file)
+      attachmentIds.push(attachmentId)
     }
-  }
 
-  const calculateTotalPrice = ({
-    workForcePrice,
-    profitPercent,
-  }: FormProductInput) => {
-    const productPrice = totalProductsPrice + workForcePrice
-    const profit = (productPrice * profitPercent) / 100
-
-    return productPrice + profit
+    return attachmentIds
   }
 
   const onSubmit = async (product: FormProductInput) => {
-    const price = calculateTotalPrice(product)
+    const attachmentsIds = await uploadFiles(product.attachments!)
 
     const payload = {
       ...product,
       id: product.id!,
-      price,
-      productsPrice: totalProductsPrice,
-      products: product.products.map((product) => product.value),
+      attachments: attachmentsIds,
     }
 
     if (currentProduct) {
@@ -90,13 +56,11 @@ export const useFormProduct = ({ currentProduct }: UseFormProductProps) => {
     router.refresh()
   }
 
-  useEffect(() => {
-    void fetchProducts()
-  }, [])
+  // useEffect(() => {
+  //   void fetchProducts()
+  // }, [])
 
   return {
-    productsOptions,
-    selectedProductsOptions,
     form,
     onSubmit,
   }

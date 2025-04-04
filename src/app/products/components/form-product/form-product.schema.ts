@@ -1,4 +1,3 @@
-import { OptionSchema } from '@/utils/option.schema'
 import { z } from 'zod'
 
 export const FormProductSchema = z.object({
@@ -6,27 +5,23 @@ export const FormProductSchema = z.object({
   name: z.string({
     required_error: 'Preencha um nome para o serviço.',
   }),
-  products: z
-    .array(OptionSchema, {
-      required_error: 'Selecione um ou mais produtos.',
-    })
-    .min(1, {
-      message: 'Selecione um ou mais produtos.',
-    }),
-  profitPercent: z.coerce
-    .number({
-      required_error: 'Preencha a margem de lucro.',
-    })
-    .min(1, {
-      message: 'A margem de lucro deve ser igual ou maior a 1%.',
-    }),
-  workForcePrice: z.coerce
-    .number({
-      required_error: 'Preencha o custo da mão de obra.',
-    })
-    .min(1, {
-      message: 'O custo da mão de obra deve ser maior que 0.',
-    }),
+  price: z.coerce.number({
+    required_error: 'Preço é um campo obrigatório.',
+  }),
+  reference: z.string().default(''),
+  attachments: z
+    .instanceof(FileList)
+    .refine((file) => file?.length >= 1, 'File is required')
+    .optional(),
+  // .transform((files) => files.length > 0 && files.item(0))
+  // .refine((file) => !file || (!!file && file.size <= 1 * 1024 * 1024), {
+  //   message: 'O tamanho máximo do arquivo é 1MB.',
+  // })
+  // .refine((file) => !file || (!!file && file.type?.startsWith('image')), {
+  //   message: 'Apenas arquivos de imagem são aceitos.',
+  // }),
+  supplierId: z.string().optional(),
+  stock: z.coerce.number().default(1),
 })
 
 export type FormProductInput = z.infer<typeof FormProductSchema>

@@ -5,7 +5,9 @@ export type Product = {
   name: string
   price: number
   reference: string
+  attachments: string[]
   supplierId?: string | null
+  stock: number
   createdAt?: Date | null
   updatedAt?: Date | null
 }
