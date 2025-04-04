@@ -36,20 +36,6 @@ export const fetchProductByName = async (name: string, page?: number) => {
   return response
 }
 
-export const uploadProductAttachment = async (file: File) => {
-  const response = await http.upload<{ attachmentId: string }, File>({
-    url: baseUrl,
-    data: file,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
-  })
-
-  revalidatePath('/products')
-
-  return response
-}
-
 export const createProduct = async (product: ProductsRequest) => {
   const response = await http.post<ProductsInputResponse, ProductsRequest>({
     url: baseUrl,

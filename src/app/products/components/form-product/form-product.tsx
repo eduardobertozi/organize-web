@@ -103,9 +103,9 @@ export const FormProduct = ({ currentProduct }: FormProductProps) => {
                     <SelectValue placeholder="Selecionar" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1">Fornecedor 1</SelectItem>
-                    <SelectItem value="2">Fornecedor 2</SelectItem>
-                    <SelectItem value="3">Fornecedor 3</SelectItem>
+                    <SelectItem value="cab5b590-e058-4af6-98a5-bb94a15df339">
+                      Denis Haus Bergh
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </FormControl>

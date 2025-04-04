@@ -3,8 +3,8 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { FormProductProps } from './form-product'
 import { FormProductInput, FormProductSchema } from './form-product.schema'
-import { uploadProductAttachment } from '@/actions/products.actions'
 import { useProductsContext } from '../../context/products.context'
+import { uploadProductAttachment } from '@/actions/attachments.actions'
 
 export type UseFormProductProps = FormProductProps
 
@@ -38,6 +38,8 @@ export const useFormProduct = ({ currentProduct }: UseFormProductProps) => {
 
   const onSubmit = async (product: FormProductInput) => {
     const attachmentsIds = await uploadFiles(product.attachments!)
+
+    console.log(attachmentsIds)
 
     const payload = {
       ...product,

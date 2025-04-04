@@ -40,14 +40,13 @@ export class FetchService implements HttpRepository {
     return responseData as T
   }
 
-  async upload<T, D>({ url, data }: PostProps<D>): Promise<T> {
+  async upload<T>({ url, data }: PostProps<File>): Promise<T> {
     const formData = new FormData()
-    formData.append('file', JSON.stringify(data))
+    formData.append('file', data)
 
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${env.API_TOKEN}`,
       },
       body: formData,
