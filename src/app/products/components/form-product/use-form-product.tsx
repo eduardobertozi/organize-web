@@ -39,8 +39,6 @@ export const useFormProduct = ({ currentProduct }: UseFormProductProps) => {
 
     setSuppliersOptions(suppliersToOptions)
 
-    console.log(currentProduct)
-
     if (currentProduct) {
       form.setValue('supplierId', currentProduct.supplierId!)
     }

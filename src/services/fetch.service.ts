@@ -70,7 +70,7 @@ export class FetchService implements HttpRepository {
         Authorization: `Bearer ${env.API_TOKEN}`,
       },
       next,
-    }).then((res) => res.json())
+    })
 
     return response as T
   }

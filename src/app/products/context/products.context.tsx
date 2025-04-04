@@ -89,8 +89,9 @@ export const ProductsProvider = ({
   const createNewProduct = async (product: ProductsRequest) => {
     startTransition(async () => {
       try {
-        const { message } = await createProduct(product)
-        toast.success(message)
+        /* TODO: implements message when adjusts backend return */
+        await createProduct(product)
+        toast.success('Produto criado com sucesso!')
       } catch (err) {
         const { message } = err as Error
         toast.error(message)
@@ -101,8 +102,9 @@ export const ProductsProvider = ({
   const updateOneProduct = async (product: ProductsRequest) => {
     startTransition(async () => {
       try {
-        const { message } = await updateProduct(product)
-        toast.success(message)
+        /* TODO: implements message when adjusts backend return */
+        await updateProduct(product)
+        toast.success('Produto atualizado com sucesso!')
       } catch (err) {
         const { message } = err as Error
         toast.error(message)

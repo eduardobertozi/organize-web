@@ -16,6 +16,8 @@ export const uploadFile = async (file: File) => {
     },
   })
 
+  console.log(response)
+
   revalidatePath('/products')
 
   return response

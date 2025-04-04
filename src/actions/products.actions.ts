@@ -51,6 +51,8 @@ export const createProduct = async (product: ProductsRequest) => {
 }
 
 export const updateProduct = async ({ id, ...product }: ProductsRequest) => {
+  console.log(id, product)
+
   const response = await http.put<ProductsInputResponse, ProductsRequest>({
     url: `${baseUrl}/${id}`,
     data: product,
@@ -60,8 +62,6 @@ export const updateProduct = async ({ id, ...product }: ProductsRequest) => {
   })
 
   revalidatePath('/products')
-
-  return response
 }
 
 export const deleteProduct = async (productId: string) => {
