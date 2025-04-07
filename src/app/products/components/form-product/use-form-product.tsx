@@ -8,6 +8,7 @@ import { uploadAndCreateAttachments } from '@/actions/attachments.actions'
 import { fetchAllSuppliers } from '@/actions/suppliers.actions'
 import { useEffect, useState } from 'react'
 import { Option } from '@/components/ui/expansions/multiple-selector'
+import { ProductAttachment } from '@/@types/products.types'
 
 export type UseFormProductProps = FormProductProps
 
@@ -49,10 +50,14 @@ export const useFormProduct = ({ currentProduct }: UseFormProductProps) => {
       product.attachments!,
     )
 
+    const attachments = attachmentsIds.map(
+      (id) => ({ id }) as ProductAttachment,
+    )
+
     const payload = {
       ...product,
       id: product.id!,
-      attachments: attachmentsIds,
+      attachments,
     }
 
     if (currentProduct) {
