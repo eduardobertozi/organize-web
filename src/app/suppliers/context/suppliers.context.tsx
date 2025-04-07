@@ -89,8 +89,8 @@ export const SuppliersProvider = ({
   const createNewSupplier = async (supplier: SuppliersRequest) => {
     startTransition(async () => {
       try {
-        await createSupplier(supplier)
-        toast.success('Fornecedor criado com sucesso')
+        const { message } = await createSupplier(supplier)
+        toast.success(message)
       } catch (err) {
         const { message } = err as Error
         toast.error(message)
@@ -101,8 +101,8 @@ export const SuppliersProvider = ({
   const updateOneSupplier = async (supplier: SuppliersRequest) => {
     startTransition(async () => {
       try {
-        await updateSupplier(supplier)
-        toast.success('Fornecedor atualizado com sucesso')
+        const { message } = await updateSupplier(supplier)
+        toast.success(message)
       } catch (err) {
         const { message } = err as Error
         toast.error(message)
