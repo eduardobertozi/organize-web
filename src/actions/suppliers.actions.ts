@@ -40,17 +40,16 @@ export const fetchSupplierByName = async (name: string, page?: number) => {
 }
 
 export const createSupplier = async (supplier: SuppliersRequest) => {
-  const response = await http.post<SuppliersInputResponse, SuppliersRequest>({
+  await http.post<SuppliersInputResponse, SuppliersRequest>({
     url: `${baseUrl}/suppliers`,
     data: supplier,
   })
 
   revalidateTag('suppliers')
-  return response
 }
 
 export const updateSupplier = async ({ id, ...supplier }: SuppliersRequest) => {
-  const response = await http.put<SuppliersInputResponse, SuppliersRequest>({
+  await http.put<SuppliersInputResponse, SuppliersRequest>({
     url: `${baseUrl}/suppliers/${id}`,
     data: supplier,
     headers: {
@@ -59,8 +58,6 @@ export const updateSupplier = async ({ id, ...supplier }: SuppliersRequest) => {
   })
 
   revalidateTag('suppliers')
-
-  return response
 }
 
 export const deleteSupplier = async (supplierId: string) => {

@@ -62,7 +62,7 @@ export const useFormProduct = ({ currentProduct }: UseFormProductProps) => {
     }
 
     await reloadProducts()
-    form.reset()
+
     router.refresh()
   }
 

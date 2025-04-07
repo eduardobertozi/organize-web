@@ -14,7 +14,7 @@ export type Supplier = {
 
 export type SuppliersRequest = Optional<
   Supplier,
-  'id' | 'createdAt' | 'updatedAt'
+  'id' | 'email' | 'createdAt' | 'updatedAt'
 >
 
 export type SuppliersResponse = {

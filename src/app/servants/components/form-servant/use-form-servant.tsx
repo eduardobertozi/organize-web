@@ -86,7 +86,7 @@ export const useFormServant = ({ currentServant }: UseFormServantProps) => {
     }
 
     await reloadServants()
-    form.reset()
+
     router.refresh()
   }
 
