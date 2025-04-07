@@ -1,11 +1,17 @@
 import { Optional } from '@/utils/optional'
 
+export type ProductAttachment = {
+  id: string
+  title: string
+  url: string
+}
+
 export type Product = {
   id: string
   name: string
   price: number
   reference: string
-  attachments: string[]
+  attachments: ProductAttachment[]
   supplierId?: string | null
   stock: number
   createdAt?: Date | null

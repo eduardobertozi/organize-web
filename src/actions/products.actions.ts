@@ -51,8 +51,6 @@ export const createProduct = async (product: ProductsRequest) => {
 }
 
 export const updateProduct = async ({ id, ...product }: ProductsRequest) => {
-  console.log(id, product)
-
   const response = await http.put<ProductsInputResponse, ProductsRequest>({
     url: `${baseUrl}/${id}`,
     data: product,

@@ -12,6 +12,7 @@ import { Product } from '@/@types/products.types'
 import { TrashIcon } from 'lucide-react'
 import { useProductsContext } from '../../context/products.context'
 import { FormProduct } from '../form-product/form-product'
+import Image from 'next/image'
 
 type ListItemProps = {
   product: Product
@@ -24,7 +25,7 @@ export const ListItem: React.FC<ListItemProps> = ({ product }) => {
     <div data-testid="list-item" className="relative space-y-2">
       <button
         type="button"
-        className="text-muted-foreground hover:text-foreground absolute top-2 right-2"
+        className="text-foreground hover:text-foreground bg-background/70 absolute top-2 right-2 z-10 rounded p-1 backdrop-blur-md"
         onClick={() => deleteOneProduct(product.id)}
       >
         <TrashIcon size={16} />
@@ -60,6 +61,20 @@ export const ListItem: React.FC<ListItemProps> = ({ product }) => {
   )
 }
 
+const baseUrl = 'https://pub-e8e7af7f91bd4696800d3166bf60081f.r2.dev/'
+
 const ProductItem = ({ product }: { product: Product }) => {
-  return <div className="bg-primary h-40 w-full rounded-lg p-4" />
+  return (
+    <div className="bg-primary flex h-40 w-full items-center justify-center rounded-lg p-4">
+      {product.attachments.length > 0 && (
+        <Image
+          width={200}
+          height={200}
+          className="rounded object-center"
+          src={baseUrl + product.attachments[0].url}
+          alt={product.attachments[0].title}
+        />
+      )}
+    </div>
+  )
 }
