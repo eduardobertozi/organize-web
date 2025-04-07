@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/card'
 import { ListServants } from './components/list-servants/list-servants'
 
-export const ServantsPage = async () => {
+const ServantsPage = async () => {
   return (
     <div className="flex h-screen w-full items-center justify-center px-6">
       <Card className="container">
