@@ -35,7 +35,7 @@ export const ListItem: React.FC<ListItemProps> = ({ product }) => {
         <SheetTrigger className="w-full">
           <ProductItem product={product} />
         </SheetTrigger>
-        <SheetContent side="left" className="w-full p-4">
+        <SheetContent side="right" className="w-full p-4">
           <SheetHeader>
             <SheetTitle>Serviço</SheetTitle>
             <SheetDescription>
@@ -47,10 +47,11 @@ export const ListItem: React.FC<ListItemProps> = ({ product }) => {
         </SheetContent>
       </Sheet>
 
-      <div className="pl-2 text-sm text-gray-500">
+      <div className="rounded-lg p-2 text-gray-500">
         <p className="text-xs">{product.reference}</p>
         <p className="text-foreground">{product.name}</p>
-        <h3 className="text-primary-foreground text-lg font-bold">
+        <p className="text-foreground">Estoque: {product.stock} items</p>
+        <h3 className="text-primary-foreground pt-2 text-lg font-bold">
           {product.price.toLocaleString('pt-BR', {
             currency: 'BRL',
             style: 'currency',
@@ -65,7 +66,7 @@ const baseUrl = 'https://pub-e8e7af7f91bd4696800d3166bf60081f.r2.dev/'
 
 const ProductItem = ({ product }: { product: Product }) => {
   return (
-    <div className="bg-primary flex h-40 w-full items-center justify-center rounded-lg p-4">
+    <div className="bg-primary flex min-h-40 w-full items-center justify-center rounded-lg p-4">
       {product.attachments.length > 0 && (
         <Image
           width={200}

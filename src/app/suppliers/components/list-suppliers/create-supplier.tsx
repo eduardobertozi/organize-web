@@ -18,7 +18,7 @@ export const CreateSupplier = () => {
           <PlusIcon size={24} /> Novo
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-full p-4">
+      <SheetContent side="right" className="w-full p-4">
         <SheetHeader>
           <SheetTitle>Fornecedor</SheetTitle>
           <SheetDescription>

@@ -13,7 +13,7 @@ export const ListSuppliers = () => {
     useSuppliersContext()
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex flex-col gap-2 md:flex-row md:items-end">
         <FindSupplier className="flex-1" />
         <CreateSupplier />

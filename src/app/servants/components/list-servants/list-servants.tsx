@@ -13,7 +13,7 @@ export const ListServants = () => {
     useServantsContext()
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex flex-col gap-2 md:flex-row md:items-end">
         <FindServant className="flex-1" />
         <CreateServant />

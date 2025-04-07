@@ -13,14 +13,14 @@ export const ListProducts = () => {
     useProductsContext()
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="flex flex-col gap-2 md:flex-row md:items-end">
         <FindProduct className="flex-1" />
         <CreateServant />
       </div>
 
       <ScrollArea className="h-[300px]">
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
           {products.map((product) => (
             <ListItem product={product} key={product.id} />
           ))}

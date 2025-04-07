@@ -50,7 +50,7 @@ export const createServant = async (servant: ServantsRequest) => {
 }
 
 export const updateServant = async ({ id, ...servant }: ServantsRequest) => {
-  const response = await http.put<ServantsInputResponse, ServantsRequest>({
+  await http.put<ServantsInputResponse, ServantsRequest>({
     url: `${baseUrl}/servants/${id}`,
     data: servant,
     headers: {
@@ -59,8 +59,6 @@ export const updateServant = async ({ id, ...servant }: ServantsRequest) => {
   })
 
   revalidateTag('servants')
-
-  return response
 }
 
 export const deleteServant = async (servantId: string) => {

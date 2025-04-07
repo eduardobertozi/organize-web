@@ -30,7 +30,7 @@ export const ListItem: React.FC<ListItemProps> = ({ supplier }) => {
         <SheetTrigger className="w-full">
           <ListItemLine supplier={supplier} />
         </SheetTrigger>
-        <SheetContent side="left" className="w-full p-4">
+        <SheetContent side="right" className="w-full p-4">
           <SheetHeader>
             <SheetTitle>Fornecedor</SheetTitle>
             <SheetDescription>

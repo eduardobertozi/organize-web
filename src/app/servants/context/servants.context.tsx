@@ -103,8 +103,8 @@ export const ServantsProvider = ({
   const updateOneServant = async (servant: ServantsRequest) => {
     startTransition(async () => {
       try {
-        const { message } = await updateServant(servant)
-        toast.success(message)
+        await updateServant(servant)
+        toast.success('Serviço atualizado com sucesso!')
       } catch (err) {
         const { message } = err as Error
         toast.error(message)
