@@ -4,7 +4,7 @@ import { InfiniteScroll } from '@/components/ui/expansions/infinite-scroll'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useProductsContext } from '../../context/products.context'
-import { CreateServant } from './create-product'
+import { CreateProduct } from './create-product'
 import { ListItem } from './list-item'
 import { FindProduct } from './find-product'
 
@@ -16,7 +16,7 @@ export const ListProducts = () => {
     <div className="space-y-6">
       <div className="flex flex-col gap-2 md:flex-row md:items-end">
         <FindProduct className="flex-1" />
-        <CreateServant />
+        <CreateProduct />
       </div>
 
       <ScrollArea className="h-[300px]">

@@ -52,6 +52,7 @@ export const FormServant = ({ currentServant }: FormServantProps) => {
                   options={vm.productsOptions}
                   placeholder="Selecione um ou mais produtos."
                   emptyIndicator="Nenhum produto encontrado."
+                  className="flex-1"
                 />
               </FormControl>
               <FormMessage />

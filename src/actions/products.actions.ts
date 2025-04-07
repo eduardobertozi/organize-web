@@ -1,13 +1,13 @@
 'use server'
 
-import { env } from '@/env'
-import { FetchService } from '@/services/fetch.service'
 import {
   ProductsInputResponse,
   ProductsRequest,
   ProductsResponse,
 } from '@/@types/products.types'
-import { revalidatePath } from 'next/cache'
+import { env } from '@/env'
+import { FetchService } from '@/services/fetch.service'
+import { revalidateTag } from 'next/cache'
 
 const http = new FetchService()
 const baseUrl = `${env.API_BASE_URL}/products`
@@ -19,6 +19,9 @@ export const fetchAllProducts = async (page?: number) => {
       Authorization: `Bearer ${env.API_TOKEN}`,
     },
     cache: 'force-cache',
+    next: {
+      tags: ['products'],
+    },
   })
 
   return response
@@ -27,9 +30,12 @@ export const fetchAllProducts = async (page?: number) => {
 export const fetchProductByName = async (name: string, page?: number) => {
   const response = await http.get<ProductsResponse>({
     url: `${baseUrl}?name=${name}&page=${page ?? 1}`,
-    cache: 'force-cache',
     headers: {
       Authorization: `Bearer ${env.API_TOKEN}`,
+    },
+    cache: 'force-cache',
+    next: {
+      tags: ['products'],
     },
   })
 
@@ -46,7 +52,7 @@ export const createProduct = async (product: ProductsRequest) => {
     },
   })
 
-  revalidatePath('/products')
+  revalidateTag('products')
 }
 
 export const updateProduct = async ({ id, ...product }: ProductsRequest) => {
@@ -59,7 +65,7 @@ export const updateProduct = async ({ id, ...product }: ProductsRequest) => {
     },
   })
 
-  revalidatePath('/products')
+  revalidateTag('products')
 }
 
 export const deleteProduct = async (productId: string) => {
@@ -70,5 +76,5 @@ export const deleteProduct = async (productId: string) => {
     },
   })
 
-  revalidatePath('/products')
+  revalidateTag('products')
 }

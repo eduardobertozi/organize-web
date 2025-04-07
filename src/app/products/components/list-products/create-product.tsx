@@ -10,7 +10,7 @@ import {
 import { PlusIcon } from 'lucide-react'
 import { FormProduct } from '../form-product/form-product'
 
-export const CreateServant = () => {
+export const CreateProduct = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
