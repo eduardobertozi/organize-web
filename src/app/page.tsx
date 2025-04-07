@@ -18,6 +18,9 @@ export default function RootPage() {
           <div className="bg-primary hover:bg-primary/90 h-10 w-full rounded p-2 text-center text-sm">
             <Link href="/products">Produtos</Link>
           </div>
+          <div className="bg-primary hover:bg-primary/90 h-10 w-full rounded p-2 text-center text-sm">
+            <Link href="/suppliers">Fornecedores</Link>
+          </div>
         </CardContent>
       </Card>
     </main>

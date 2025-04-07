@@ -37,7 +37,8 @@ export const fetchProductByName = async (name: string, page?: number) => {
 }
 
 export const createProduct = async (product: ProductsRequest) => {
-  const response = await http.post<ProductsInputResponse, ProductsRequest>({
+  /* TODO: Implements return when backend already fix */
+  await http.post<ProductsInputResponse, ProductsRequest>({
     url: baseUrl,
     data: product,
     headers: {
@@ -46,12 +47,11 @@ export const createProduct = async (product: ProductsRequest) => {
   })
 
   revalidatePath('/products')
-
-  return response
 }
 
 export const updateProduct = async ({ id, ...product }: ProductsRequest) => {
-  const response = await http.put<ProductsInputResponse, ProductsRequest>({
+  /* TODO: Implements return when backend already fix */
+  await http.put<ProductsInputResponse, ProductsRequest>({
     url: `${baseUrl}/${id}`,
     data: product,
     headers: {
@@ -63,7 +63,7 @@ export const updateProduct = async ({ id, ...product }: ProductsRequest) => {
 }
 
 export const deleteProduct = async (productId: string) => {
-  const response = await http.delete<void>({
+  await http.delete<void>({
     url: `${baseUrl}/${productId}`,
     headers: {
       Authorization: `Bearer ${env.API_TOKEN}`,
@@ -71,6 +71,4 @@ export const deleteProduct = async (productId: string) => {
   })
 
   revalidatePath('/products')
-
-  return response
 }
