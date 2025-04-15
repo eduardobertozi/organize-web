@@ -12,7 +12,7 @@ import { revalidateTag } from 'next/cache'
 const http = new FetchService()
 const baseUrl = env.API_BASE_URL
 
-export const fetchAllServants = async (page: number) => {
+export const fetchAllServants = async (page?: number) => {
   const response = await http.get<ServantsResponse>({
     url: `${baseUrl}/servants/all?page=${page ?? 1}`,
     headers: {
