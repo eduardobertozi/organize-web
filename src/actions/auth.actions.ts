@@ -1,6 +1,11 @@
 'use server'
 
-import { AuthRequest, AuthResponse } from '@/@types/auth.types'
+import {
+  AuthRequest,
+  AuthResponse,
+  CreateUserResponse,
+  UserRequest,
+} from '@/@types/auth.types'
 import { env } from '@/env'
 import { FetchService } from '@/services/fetch.service'
 import { cookies } from 'next/headers'
@@ -45,4 +50,20 @@ export const logout = async () => {
   cookiesStore.delete('access_token')
 
   return redirect('/auth')
+}
+
+export const createUser = async ({ name, username, password }: UserRequest) => {
+  const { user } = await http.post<CreateUserResponse, UserRequest>({
+    url: `${baseUrl}/accounts`,
+    data: {
+      name,
+      username,
+      password,
+    },
+    headers: {
+      Authorization: `Bearer ${env.API_TOKEN}`,
+    },
+  })
+
+  return user
 }

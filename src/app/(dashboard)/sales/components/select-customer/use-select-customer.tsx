@@ -1,32 +1,19 @@
 'use client'
 
 import { Customer } from '@/@types/customers.types'
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useTransition } from 'react'
 import { SelectCustomerProps } from './select-customer'
 import { debounce } from 'lodash'
-
-const customersMock = [
-  {
-    id: '1',
-    name: 'Cliente 1',
-    phone: '47999999999',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: '2',
-    name: 'Cliente 2',
-    phone: '47999999999',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-]
+import { createCustomer, fetchAllCustomers } from '@/actions/customers.actions'
+import { toast } from 'sonner'
+import { createUser } from '@/actions/auth.actions'
 
 export const useSelectCustomer = ({ selectCustomer }: SelectCustomerProps) => {
   const [customerName, setCustomerName] = useState('')
   const [customers, setCustomers] = useState<Customer[]>([])
   const [isNewCustomer, setIsNewCustomer] = useState(false)
   const [customerPhone, setCustomerPhone] = useState('')
+  const [loading, startTransition] = useTransition()
 
   const onChangeCustomerName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCustomerName(event.target.value)
@@ -38,21 +25,22 @@ export const useSelectCustomer = ({ selectCustomer }: SelectCustomerProps) => {
   }
 
   const onChangeCustomerSearchName = useCallback(
-    debounce((value: string) => {
-      setCustomerName(value)
+    debounce(async (value: string) => {
+      startTransition(async () => {
+        setCustomerName(value)
 
-      if (value.length < 3) {
-        setCustomers([])
-        setIsNewCustomer(false)
-        return
-      }
+        if (value.length < 3) {
+          setCustomers([])
+          setIsNewCustomer(false)
+          return
+        }
 
-      const data = customersMock.filter((customer) =>
-        customer.name.toLowerCase().includes(value.toLowerCase()),
-      )
+        const { customers } = await fetchAllCustomers(value)
+        console.log(customers, 'CUSTOMERS')
 
-      setCustomers(data)
-      setIsNewCustomer(data.length === 0)
+        setCustomers(customers)
+        setIsNewCustomer(customers.length === 0)
+      })
     }, 300),
     [],
   )
@@ -68,10 +56,31 @@ export const useSelectCustomer = ({ selectCustomer }: SelectCustomerProps) => {
     setIsNewCustomer(false)
   }
 
-  const onSubmit = () => {
-    console.log({
-      customerName,
-      customerPhone,
+  const createNewCustomer = () => {
+    startTransition(async () => {
+      try {
+        const user = await createUser({
+          name: customerName,
+          username: customerName,
+          password: customerPhone,
+        })
+
+        const { customer } = await createCustomer({
+          name: customerName,
+          phone: customerPhone,
+          userId: user.id,
+        })
+
+        setCustomerName(customerName)
+        setCustomers([])
+        setIsNewCustomer(false)
+        selectCustomer(customer)
+
+        toast.success('Cliente cadastrado com sucesso!')
+      } catch (err) {
+        const { message } = err as Error
+        toast.error(message)
+      }
     })
   }
 
@@ -79,7 +88,8 @@ export const useSelectCustomer = ({ selectCustomer }: SelectCustomerProps) => {
     customers,
     customerName,
     isNewCustomer,
-    onSubmit,
+    loading,
+    createNewCustomer,
     onChangeCustomerPhone,
     onSelectCustomer,
     onChangeCustomerName,

@@ -81,7 +81,7 @@ export const SelectCustomer = ({
               <Button
                 type="button"
                 className="mt-4 w-full"
-                onClick={vm.onSubmit}
+                onClick={vm.createNewCustomer}
               >
                 Cadastrar cliente
               </Button>
