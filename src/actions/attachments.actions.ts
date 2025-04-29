@@ -2,7 +2,7 @@
 
 import { env } from '@/env'
 import { FetchService } from '@/services/fetch.service'
-import { revalidatePath } from 'next/cache'
+import { revalidateTag } from 'next/cache'
 
 const http = new FetchService()
 const baseUrl = `${env.API_BASE_URL}/attachments`
@@ -16,9 +16,7 @@ export const uploadFile = async (file: File) => {
     },
   })
 
-  console.log(response)
-
-  revalidatePath('/products')
+  revalidateTag('/products')
 
   return response
 }
