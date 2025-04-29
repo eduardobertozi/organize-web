@@ -50,7 +50,9 @@ export const FormLogin = () => {
           )}
         />
 
-        <Button className="mt-4 w-full">Entrar</Button>
+        <Button className="mt-4 w-full" disabled={vm.loading}>
+          Entrar
+        </Button>
       </form>
     </Form>
   )

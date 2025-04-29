@@ -40,6 +40,7 @@ function Input({
         type={inputType}
         data-slot="input"
         className={cn(...inputCn, iconStyle, isPasswordStyle, className)}
+        autoComplete="off"
       />
 
       {isPassword && (
