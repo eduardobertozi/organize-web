@@ -11,9 +11,6 @@ export const uploadFile = async (file: File) => {
   const response = await http.upload<{ attachmentId: string }>({
     url: baseUrl,
     data: file,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
   })
 
   revalidateTag('/products')

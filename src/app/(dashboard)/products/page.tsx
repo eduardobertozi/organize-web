@@ -20,7 +20,8 @@ const ProductsPage = async () => {
           </div>
 
           <CardDescription className="text-xs">
-            Inclua, edite ou exclua produtos.
+            Inclua, edite ou exclua produtos. Para editar basta clicar sobre um
+            item da lista.
           </CardDescription>
         </CardHeader>
         <CardContent>

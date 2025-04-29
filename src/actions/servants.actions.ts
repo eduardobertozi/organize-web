@@ -15,9 +15,6 @@ const baseUrl = env.API_BASE_URL
 export const fetchAllServants = async (page?: number) => {
   const response = await http.get<ServantsResponse>({
     url: `${baseUrl}/servants/all?page=${page ?? 1}`,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
     next: {
       tags: ['servants'],
     },
@@ -31,9 +28,6 @@ export const fetchServantByName = async (name: string, page?: number) => {
   const response = await http.get<ServantsResponse>({
     url: `${baseUrl}/servants/all?q=${name}&page=${page ?? 1}`,
     cache: 'force-cache',
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
   })
 
   return response
@@ -53,9 +47,6 @@ export const updateServant = async ({ id, ...servant }: ServantsRequest) => {
   await http.put<ServantsInputResponse, ServantsRequest>({
     url: `${baseUrl}/servants/${id}`,
     data: servant,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
   })
 
   revalidateTag('servants')
@@ -64,9 +55,6 @@ export const updateServant = async ({ id, ...servant }: ServantsRequest) => {
 export const deleteServant = async (servantId: string) => {
   await http.delete<void>({
     url: `${baseUrl}/servants/${servantId}`,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
   })
 
   revalidateTag('servants')

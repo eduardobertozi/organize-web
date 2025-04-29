@@ -15,9 +15,6 @@ const baseUrl = `${env.API_BASE_URL}/customers`
 export const fetchAllCustomers = async (q?: string) => {
   const response = await http.get<CustomersResponse>({
     url: `${baseUrl}?q=${q ?? ''}`,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
     cache: 'force-cache',
     next: {
       tags: ['customers'],
@@ -31,9 +28,6 @@ export const createCustomer = async (customer: CustomerRequest) => {
   const response = await http.post<CreateCustomerResponse, CustomerRequest>({
     url: baseUrl,
     data: customer,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
   })
 
   revalidateTag('customers')

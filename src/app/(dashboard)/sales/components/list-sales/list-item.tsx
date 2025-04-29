@@ -11,7 +11,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import dayjs from 'dayjs'
-import { CalendarIcon, TrashIcon } from 'lucide-react'
+import { CalendarIcon, TrashIcon, UserIcon } from 'lucide-react'
 import { useSalesContext } from '../context/sales.context'
 import { FormSale } from '../form-sales/form-sales'
 
@@ -59,12 +59,16 @@ const ListItemLine = ({ sale }: { sale: Sale }) => {
   return (
     <div className="flex w-full flex-1 flex-col items-start p-0 hover:bg-transparent md:flex-row md:items-center md:justify-between">
       <div className="flex w-full gap-4 text-start text-sm">
-        <p className="flex-1 md:flex-none">{sale.description}</p>
+        <p className="flex-1 md:flex-none">{sale.description}</p>|
         <p>
           {sale.amount.toLocaleString('pt-BR', {
             currency: 'BRL',
             style: 'currency',
           })}
+        </p>
+        |
+        <p className="flex items-center gap-1">
+          <UserIcon size={16} /> {sale.employee}
         </p>
       </div>
 

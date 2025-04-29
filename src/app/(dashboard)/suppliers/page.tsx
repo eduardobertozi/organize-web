@@ -20,7 +20,8 @@ const SuppliersPage = async () => {
           </div>
 
           <CardDescription className="text-xs">
-            Inclua, edite ou exclua fornecedores.
+            Inclua, edite ou exclua fornecedores. Para editar basta clicar sobre
+            um item da lista.
           </CardDescription>
         </CardHeader>
         <CardContent>

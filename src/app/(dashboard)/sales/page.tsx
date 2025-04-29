@@ -20,7 +20,8 @@ const SalesPage = async () => {
           </div>
 
           <CardDescription className="text-xs">
-            Crie, edite ou exclua uma venda.
+            Crie, edite ou exclua uma venda. Para editar basta clicar sobre um
+            item da lista.
           </CardDescription>
         </CardHeader>
         <CardContent>

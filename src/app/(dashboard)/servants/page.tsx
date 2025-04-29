@@ -20,7 +20,8 @@ const ServantsPage = async () => {
           </div>
 
           <CardDescription className="text-xs">
-            Inclua, edite ou exclua os serviços que você oferece.
+            Inclua, edite ou exclua os serviços que você oferece. Para editar
+            basta clicar sobre um item da lista.
           </CardDescription>
         </CardHeader>
         <CardContent>

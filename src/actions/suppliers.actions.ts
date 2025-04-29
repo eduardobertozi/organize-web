@@ -15,9 +15,6 @@ const baseUrl = env.API_BASE_URL
 export const fetchAllSuppliers = async (page?: number) => {
   const response = await http.get<SuppliersResponse>({
     url: `${baseUrl}/suppliers/all?page=${page ?? 1}`,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
     next: {
       tags: ['suppliers'],
     },
@@ -31,9 +28,6 @@ export const fetchSupplierByName = async (name: string, page?: number) => {
   const response = await http.get<SuppliersResponse>({
     url: `${baseUrl}/suppliers/all?q=${name}&page=${page ?? 1}`,
     cache: 'force-cache',
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
   })
 
   return response
@@ -53,9 +47,6 @@ export const updateSupplier = async ({ id, ...supplier }: SuppliersRequest) => {
   const response = await http.put<SuppliersInputResponse, SuppliersRequest>({
     url: `${baseUrl}/suppliers/${id}`,
     data: supplier,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
   })
 
   revalidateTag('suppliers')
@@ -65,9 +56,6 @@ export const updateSupplier = async ({ id, ...supplier }: SuppliersRequest) => {
 export const deleteSupplier = async (supplierId: string) => {
   await http.delete<void>({
     url: `${baseUrl}/suppliers/${supplierId}`,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
   })
 
   revalidateTag('suppliers')

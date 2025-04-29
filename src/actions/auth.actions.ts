@@ -10,6 +10,7 @@ import { env } from '@/env'
 import { FetchService } from '@/services/fetch.service'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { getUser } from './user.actions'
 
 const http = new FetchService()
 const baseUrl = env.API_BASE_URL
@@ -17,11 +18,13 @@ const baseUrl = env.API_BASE_URL
 export const login = async (data: AuthRequest) => {
   const response = await http.post<AuthResponse, AuthRequest>({
     url: `${baseUrl}/sessions`,
+    headers: {
+      'Content-Type': 'application/json',
+    },
     data,
   })
 
   if (!response.access_token) {
-    console.log(response)
     throw new Error('Invalid credentials')
   }
 
@@ -32,19 +35,6 @@ export const login = async (data: AuthRequest) => {
   })
 }
 
-export const getUser = async () => {
-  const cookiesStore = await cookies()
-  const access_token = cookiesStore.get('access_token')
-
-  if (!access_token) {
-    return null
-  }
-
-  return {
-    access_token: access_token.value,
-  }
-}
-
 export const logout = async () => {
   const cookiesStore = await cookies()
   cookiesStore.delete('access_token')
@@ -53,7 +43,9 @@ export const logout = async () => {
 }
 
 export const createUser = async ({ name, username, password }: UserRequest) => {
-  const { user } = await http.post<CreateUserResponse, UserRequest>({
+  const user = await getUser()
+
+  const data = await http.post<CreateUserResponse, UserRequest>({
     url: `${baseUrl}/accounts`,
     data: {
       name,
@@ -61,9 +53,9 @@ export const createUser = async ({ name, username, password }: UserRequest) => {
       password,
     },
     headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
+      Authorization: `Bearer ${user?.access_token}`,
     },
   })
 
-  return user
+  return data.user
 }

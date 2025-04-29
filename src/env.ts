@@ -2,7 +2,6 @@ import { z } from 'zod'
 
 const envSchema = z.object({
   API_BASE_URL: z.string().url(),
-  API_TOKEN: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)

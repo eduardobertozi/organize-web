@@ -7,8 +7,8 @@ import {
 } from '@/components/ui/card'
 import { FormLogin } from './components/form-login'
 import { redirect } from 'next/navigation'
-import { getUser } from '@/actions/auth.actions'
 import { Logo } from '@/components/global/logo'
+import { getUser } from '@/actions/user.actions'
 
 export default async function RootPage() {
   const user = await getUser()

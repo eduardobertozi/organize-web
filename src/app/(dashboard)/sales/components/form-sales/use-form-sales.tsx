@@ -59,7 +59,7 @@ export const useFormSale = ({ currentSale }: UseFormSaleProps) => {
 
   const selectCustomer = (customer: Customer) => {
     form.setValue('customerId', customer.id)
-    form.setValue('description', `Venda - ${customer.name}`)
+    form.setValue('description', `Venda cliente: ${customer.name}`)
   }
 
   const onSelectServants = (selectedServants: Option[]) => {

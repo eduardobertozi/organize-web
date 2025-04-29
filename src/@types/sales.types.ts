@@ -5,12 +5,17 @@ export type Sale = {
   description?: string | null
   amount: number
   customerId: string
+  employeeId: string
+  employee: string
   servants: string[]
   createdAt?: Date | null
   updatedAt?: Date | null
 }
 
-export type SalesRequest = Optional<Sale, 'id' | 'createdAt' | 'updatedAt'>
+export type SalesRequest = Optional<
+  Sale,
+  'id' | 'createdAt' | 'updatedAt' | 'employeeId' | 'employee'
+>
 
 export type SalesResponse = {
   total: number

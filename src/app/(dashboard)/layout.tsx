@@ -1,4 +1,4 @@
-import { getUser } from '@/actions/auth.actions'
+import { getUser } from '@/actions/user.actions'
 import { Header } from '@/components/global/header'
 import { redirect } from 'next/navigation'
 

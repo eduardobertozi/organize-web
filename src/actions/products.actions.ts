@@ -15,9 +15,6 @@ const baseUrl = `${env.API_BASE_URL}/products`
 export const fetchAllProducts = async (page?: number) => {
   const response = await http.get<ProductsResponse>({
     url: `${baseUrl}/all?page=${page ?? 1}`,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
     cache: 'force-cache',
     next: {
       tags: ['products'],
@@ -30,9 +27,6 @@ export const fetchAllProducts = async (page?: number) => {
 export const fetchProductByName = async (name: string, page?: number) => {
   const response = await http.get<ProductsResponse>({
     url: `${baseUrl}?name=${name}&page=${page ?? 1}`,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
     cache: 'force-cache',
     next: {
       tags: ['products'],
@@ -47,9 +41,6 @@ export const createProduct = async (product: ProductsRequest) => {
   await http.post<ProductsInputResponse, ProductsRequest>({
     url: baseUrl,
     data: product,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
   })
 
   revalidateTag('products')
@@ -60,9 +51,6 @@ export const updateProduct = async ({ id, ...product }: ProductsRequest) => {
   await http.put<ProductsInputResponse, ProductsRequest>({
     url: `${baseUrl}/${id}`,
     data: product,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
   })
 
   revalidateTag('products')
@@ -71,9 +59,6 @@ export const updateProduct = async ({ id, ...product }: ProductsRequest) => {
 export const deleteProduct = async (productId: string) => {
   await http.delete<void>({
     url: `${baseUrl}/${productId}`,
-    headers: {
-      Authorization: `Bearer ${env.API_TOKEN}`,
-    },
   })
 
   revalidateTag('products')
