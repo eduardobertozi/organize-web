@@ -19,7 +19,7 @@ export default async function RootPage() {
 
   return (
     <main className="grid h-screen w-full place-items-center px-6">
-      <Card className="bg-background/20 w-sm border-0 backdrop-blur-md">
+      <Card className="bg-background/20 w-full max-w-sm border-0 backdrop-blur-md">
         <CardHeader>
           <Logo className="mb-8 h-12" />
 

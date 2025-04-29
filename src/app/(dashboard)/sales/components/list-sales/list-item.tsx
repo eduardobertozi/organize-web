@@ -57,21 +57,17 @@ export const ListItem: React.FC<ListItemProps> = ({ sale }) => {
 
 const ListItemLine = ({ sale }: { sale: Sale }) => {
   return (
-    <div className="flex w-full flex-1 flex-col items-start p-0 hover:bg-transparent md:flex-row md:items-center md:justify-between">
-      <div className="flex w-full gap-4 text-start text-sm">
-        <p className="flex-1 md:flex-none">{sale.description}</p>|
-        <p>
-          {sale.amount.toLocaleString('pt-BR', {
-            currency: 'BRL',
-            style: 'currency',
-          })}
-        </p>
-        |
-        <p className="flex items-center gap-1">
-          <UserIcon size={16} /> {sale.employee}
-        </p>
-      </div>
-
+    <div className="grid w-full gap-2 p-0 text-start hover:bg-transparent md:grid-cols-4 md:place-items-start">
+      <span>{sale.description}</span>
+      <span>
+        {sale.amount.toLocaleString('pt-BR', {
+          currency: 'BRL',
+          style: 'currency',
+        })}
+      </span>
+      <span className="flex items-center gap-1">
+        <UserIcon size={16} /> {sale.employee}
+      </span>
       <div className="flex gap-1 text-xs whitespace-nowrap text-zinc-600">
         <CalendarIcon size={16} />
         <p>{dayjs(sale.createdAt).format('DD/MM/YYYY HH:mm')}</p>

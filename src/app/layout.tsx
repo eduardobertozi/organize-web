@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`from-background dark via-background to-primary/60 bg-gradient-to-tr ${inter.className} antialiased`}
+        className={`from-background dark via-background to-primary/60 h-screen w-full bg-gradient-to-tr ${inter.className} antialiased`}
       >
         <GlobalProvider>{children}</GlobalProvider>
         <Toaster />
