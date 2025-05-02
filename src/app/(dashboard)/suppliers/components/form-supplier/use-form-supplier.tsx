@@ -18,7 +18,7 @@ export const useFormSupplier = ({ currentSupplier }: UseFormSupplierProps) => {
   })
 
   const onSubmit = async (supplier: FormSupplierInput) => {
-    if (currentSupplier) {
+    if (currentSupplier?.id) {
       await updateOneSupplier({
         ...supplier,
         id: currentSupplier.id,

@@ -9,11 +9,12 @@ import { FormSaleInput, FormSaleSchema } from './form-sales.schema'
 import { fetchAllServants } from '@/actions/servants.actions'
 import { Servant } from '@/@types/servants.types'
 import { Customer } from '@/@types/customers.types'
+import { useSheetToggle } from '@/components/ui/sheet'
 
 export type UseFormSaleProps = FormSaleProps
 
 export const useFormSale = ({ currentSale }: UseFormSaleProps) => {
-  const router = useRouter()
+  const { toggle } = useSheetToggle()
   const { reloadSales, createNewSale, updateOneSale } = useSalesContext()
   const [servants, setServants] = useState<Servant[]>([])
   const [servantsOptions, setServantsOptions] = useState<Option[]>([])
@@ -93,7 +94,7 @@ export const useFormSale = ({ currentSale }: UseFormSaleProps) => {
     }
 
     await reloadSales()
-    router.refresh()
+    toggle()
   }
 
   useEffect(() => {

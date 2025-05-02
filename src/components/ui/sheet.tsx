@@ -5,9 +5,76 @@ import * as SheetPrimitive from '@radix-ui/react-dialog'
 import { XIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
+import { useEffect } from 'react'
 
-function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
-  return <SheetPrimitive.Root data-slot="sheet" {...props} />
+const SheetContext = React.createContext({
+  open: false,
+  toggle: () => {},
+})
+
+type SheetProviderProps = {
+  children: React.ReactNode
+  defaultOpen?: boolean
+  defaultOpenChange?: (open: boolean) => void
+}
+
+const SheetProvider = ({
+  children,
+  defaultOpen,
+  defaultOpenChange,
+}: SheetProviderProps) => {
+  const [open, setOpen] = React.useState(defaultOpen || false)
+
+  useEffect(() => {
+    setOpen(defaultOpen || false)
+  }, [defaultOpen])
+
+  const toggle = () => {
+    const state = !open
+    setOpen(state)
+    if (defaultOpenChange) {
+      defaultOpenChange(state)
+    }
+  }
+
+  return (
+    <SheetContext.Provider value={{ open, toggle }}>
+      {children}
+    </SheetContext.Provider>
+  )
+}
+
+const Sheet = ({
+  ...props
+}: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Root>) => {
+  return (
+    <SheetProvider
+      defaultOpen={props.open}
+      defaultOpenChange={props.onOpenChange}
+    >
+      <SheetRoot {...props} />
+    </SheetProvider>
+  )
+}
+
+export const useSheetToggle = () => {
+  const context = React.useContext(SheetContext)
+  if (!context) {
+    throw new Error('useSheetToggle must be used within a DialogProvider')
+  }
+  return context
+}
+
+const SheetRoot = ({
+  children,
+}: React.ComponentPropsWithoutRef<typeof SheetPrimitive.Root>) => {
+  const { open, toggle } = useSheetToggle()
+
+  return (
+    <SheetPrimitive.Root open={open} onOpenChange={toggle}>
+      {children}
+    </SheetPrimitive.Root>
+  )
 }
 
 function SheetTrigger({
