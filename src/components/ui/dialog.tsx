@@ -5,11 +5,76 @@ import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { XIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
+import { useEffect } from 'react'
 
-function Dialog({
+const DialogContext = React.createContext({
+  open: false,
+  toggle: () => {},
+})
+
+type DialogProviderProps = {
+  children: React.ReactNode
+  defaultOpen?: boolean
+  defaultOpenChange?: (open: boolean) => void
+}
+
+const DialogProvider = ({
+  children,
+  defaultOpen,
+  defaultOpenChange,
+}: DialogProviderProps) => {
+  const [open, setOpen] = React.useState(defaultOpen || false)
+
+  useEffect(() => {
+    setOpen(defaultOpen || false)
+  }, [defaultOpen])
+
+  const toggle = () => {
+    const state = !open
+    setOpen(state)
+    if (defaultOpenChange) {
+      defaultOpenChange(state)
+    }
+  }
+
+  return (
+    <DialogContext.Provider value={{ open, toggle }}>
+      {children}
+    </DialogContext.Provider>
+  )
+}
+
+const Dialog = ({
   ...props
-}: React.ComponentProps<typeof DialogPrimitive.Root>) {
-  return <DialogPrimitive.Root data-slot="dialog" {...props} />
+}: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root>) => {
+  return (
+    <DialogProvider
+      defaultOpen={props.open}
+      defaultOpenChange={props.onOpenChange}
+    >
+      <DialogRoot {...props} />
+    </DialogProvider>
+  )
+}
+
+export const useDialogToggle = () => {
+  const context = React.useContext(DialogContext)
+  if (!context) {
+    throw new Error('useDialogToggle must be used within a DialogProvider')
+  }
+  return context
+}
+
+const DialogRoot = ({
+  children,
+}: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root>) => {
+  const { open, toggle } = useDialogToggle()
+
+  return (
+    <DialogPrimitive.Root open={open} onOpenChange={toggle}>
+      {children}
+    </DialogPrimitive.Root>
+  )
 }
 
 function DialogTrigger({

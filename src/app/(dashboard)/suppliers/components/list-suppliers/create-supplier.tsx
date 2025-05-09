@@ -25,7 +25,17 @@ export const CreateSupplier = () => {
             Adicione, edite ou exclua um fornecedor.
           </SheetDescription>
         </SheetHeader>
-        <FormSupplier />
+        <FormSupplier
+          currentSupplier={{
+            id: '',
+            name: '',
+            email: '',
+            phone: '',
+            city: '',
+            state: '',
+            address: '',
+          }}
+        />
       </SheetContent>
     </Sheet>
   )

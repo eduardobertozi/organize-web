@@ -13,12 +13,12 @@ function ScrollArea({
   return (
     <ScrollAreaPrimitive.Root
       data-slot="scroll-area"
-      className={cn('relative', className)}
+      className={cn('group relative', className)}
       {...props}
     >
       <ScrollAreaPrimitive.Viewport
         data-slot="scroll-area-viewport"
-        className="ring-ring/10 dark:ring-ring/20 dark:outline-ring/40 outline-ring/50 size-full rounded-[inherit] transition-[color,box-shadow] focus-visible:ring-4 focus-visible:outline-1"
+        className="ring-ring/10 dark:ring-ring/20 dark:outline-ring/40 outline-ring/50 mx-auto size-full transform rounded-[inherit] transition-all duration-300 group-hover:w-[98%] focus-visible:ring-4 focus-visible:outline-1"
       >
         {children}
       </ScrollAreaPrimitive.Viewport>

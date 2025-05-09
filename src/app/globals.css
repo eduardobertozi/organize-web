@@ -123,6 +123,15 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  @keyframes loading-bar {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }
 
 .theme-loading {

@@ -14,6 +14,7 @@ import { Label } from '@/components/ui/label'
 import { SearchIcon } from 'lucide-react'
 import { useSelectCustomer } from './use-select-customer'
 import { Customer } from '@/@types/customers.types'
+import { useDialogToggle } from '@/components/ui/dialog'
 
 export type SelectCustomerProps = {
   selectCustomer: (customer: Customer) => void
@@ -25,9 +26,10 @@ export const SelectCustomer = ({
   error,
 }: SelectCustomerProps) => {
   const vm = useSelectCustomer({ selectCustomer, error })
+  const { toggle } = useDialogToggle()
 
   return (
-    <Dialog onOpenChange={vm.resetIsNewCustomer}>
+    <Dialog>
       <DialogTrigger asChild>
         <div className="space-y-2">
           <Label className={error ? 'text-destructive-foreground' : ''}>
@@ -62,7 +64,11 @@ export const SelectCustomer = ({
                 <button
                   key={customer.id}
                   className="flex w-full items-center border-b p-2"
-                  onClick={() => vm.onSelectCustomer(customer)}
+                  onClick={() => {
+                    console.log('customer', customer)
+                    vm.onSelectCustomer(customer)
+                    toggle()
+                  }}
                 >
                   <p className="text-sm">{customer.name}</p>
                 </button>

@@ -3,26 +3,32 @@ import Link from 'next/link'
 
 export default function RootPage() {
   return (
-    <main className="grid h-screen w-full place-items-center px-6">
-      <Card className="container">
-        <CardHeader>
-          <CardTitle>Bem vindo!</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+    <Card className="container">
+      <CardHeader>
+        <CardTitle>Bem vindo!</CardTitle>
+      </CardHeader>
+      <CardContent className="flex-col space-y-4 *:flex">
+        <Link href="/sales">
           <div className="bg-primary hover:bg-primary/90 h-10 w-full rounded p-2 text-center text-sm">
-            <Link href="/sales">Vendas</Link>
+            Vendas
           </div>
+        </Link>
+        <Link href="/servants">
           <div className="bg-primary hover:bg-primary/90 h-10 w-full rounded p-2 text-center text-sm">
-            <Link href="/servants">Serviços</Link>
+            Serviços
           </div>
+        </Link>
+        <Link href="/products">
           <div className="bg-primary hover:bg-primary/90 h-10 w-full rounded p-2 text-center text-sm">
-            <Link href="/products">Produtos</Link>
+            Produtos
           </div>
+        </Link>
+        <Link href="/suppliers">
           <div className="bg-primary hover:bg-primary/90 h-10 w-full rounded p-2 text-center text-sm">
-            <Link href="/suppliers">Fornecedores</Link>
+            Fornecedores
           </div>
-        </CardContent>
-      </Card>
-    </main>
+        </Link>
+      </CardContent>
+    </Card>
   )
 }

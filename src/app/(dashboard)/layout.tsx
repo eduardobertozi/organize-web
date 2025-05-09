@@ -14,9 +14,11 @@ export default async function DashboardLayout({
   }
 
   return (
-    <>
+    <div className="flex h-screen w-full flex-col">
       <Header />
-      {children}
-    </>
+      <main className="flex flex-1 items-center justify-center px-6">
+        {children}
+      </main>
+    </div>
   )
 }

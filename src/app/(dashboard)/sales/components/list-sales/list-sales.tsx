@@ -16,20 +16,22 @@ export const ListSales = () => {
         <CreateSale />
       </div>
 
-      <ScrollArea className="h-[300px]">
-        {sales.map((sale) => (
-          <ListItem sale={sale} key={sale.id} />
-        ))}
+      <div className="grid">
+        <ScrollArea className="max-h-52 sm:max-h-[300px]">
+          {sales.map((sale) => (
+            <ListItem sale={sale} key={sale.id} />
+          ))}
 
-        <InfiniteScroll
-          hasMore={hasMore}
-          isLoading={loading}
-          next={fetchSales}
-          threshold={1}
-        >
-          {hasMore && <Skeleton className="h-12 w-full" />}
-        </InfiniteScroll>
-      </ScrollArea>
+          <InfiniteScroll
+            hasMore={hasMore}
+            isLoading={loading}
+            next={fetchSales}
+            threshold={1}
+          >
+            {hasMore && <Skeleton className="h-12 w-full" />}
+          </InfiniteScroll>
+        </ScrollArea>
+      </div>
       <p className="text-xs text-zinc-300">
         Exibindo {sales.length} de {total} produtos
       </p>
